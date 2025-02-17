@@ -23,8 +23,10 @@ public interface ILogistiqueService {
     List<LigneCommande> getAllLigneCommande();
     void supprimerLigneCommande(Long id);
     void modifierLigneCommande(Long id , LigneCommande ligneCommande);
+     void supprimerLignesSansCommande();
+    List<LigneCommande> getLignesCommandeByCommande(Long id);
 
     //----------Commande
      Commande ajouterCommande(Commande commande) ;
-
+     List<Commande> getAllCommande();
 }

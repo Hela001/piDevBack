@@ -4,6 +4,7 @@ import com.esprit.ms.pidevbackend.Entities.Categorie;
 import com.esprit.ms.pidevbackend.Entities.Commande;
 import com.esprit.ms.pidevbackend.Entities.LigneCommande;
 import com.esprit.ms.pidevbackend.Entities.Materiel;
+import com.esprit.ms.pidevbackend.Repo.LigneCommandeRepo;
 import com.esprit.ms.pidevbackend.Services.ILogistiqueService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,7 @@ import java.util.List;
 public class LogistiqueController {
 
     private final ILogistiqueService logistiqueService;
+    LigneCommandeRepo ligneCommandeRepository;
 
     @PostMapping("/ajouterMateriel")
     public Materiel ajouterMateriel(@RequestBody Materiel materiel) {
@@ -62,6 +64,18 @@ public class LogistiqueController {
     public void supprimerLigneCommande(@PathVariable Long id){
         logistiqueService.supprimerLigneCommande(id);
     }
+    @DeleteMapping("/supprimerLignesCommandeSansIdCommande")
+    public void supprimerLignesSansCommande(){
+        logistiqueService.supprimerLignesSansCommande();
+    }
+    @GetMapping("/lignesCommande/{idCommande}")
+    public List<LigneCommande> getLignesCommandeByCommande(@PathVariable Long idCommande) {
+        List<LigneCommande> lignesCommande = logistiqueService.getLignesCommandeByCommande(idCommande);
+        System.out.println("Nombre de lignes récupérées : " + lignesCommande.size());
+
+        return lignesCommande;
+    }
+
     @PutMapping("/modifierLigneCommande/{id}")
     public ResponseEntity<LigneCommande> modifierLigneCommande(
             @PathVariable Long id,
@@ -84,6 +98,11 @@ public class LogistiqueController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erreur lors de l'ajout de la commande.");
         }
+    }
+
+    @GetMapping("/getAllCommande")
+    public List<Commande> getAllCommande(){
+        return logistiqueService.getAllCommande();
     }
 
 }

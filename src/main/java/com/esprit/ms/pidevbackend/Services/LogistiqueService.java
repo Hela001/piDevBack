@@ -1,9 +1,6 @@
 package com.esprit.ms.pidevbackend.Services;
 
-import com.esprit.ms.pidevbackend.Entities.Categorie;
-import com.esprit.ms.pidevbackend.Entities.Commande;
-import com.esprit.ms.pidevbackend.Entities.LigneCommande;
-import com.esprit.ms.pidevbackend.Entities.Materiel;
+import com.esprit.ms.pidevbackend.Entities.*;
 import com.esprit.ms.pidevbackend.Repo.CommandeRepo;
 import com.esprit.ms.pidevbackend.Repo.LigneCommandeRepo;
 import com.esprit.ms.pidevbackend.Repo.MaterielRepo;
@@ -74,6 +71,15 @@ public class LogistiqueService implements ILogistiqueService {
         LigneCommande ligneCommande = ligneCommandeRepo.findById(id).get();
         ligneCommandeRepo.delete(ligneCommande);
     }
+    @Override
+    public void supprimerLignesSansCommande() {
+        ligneCommandeRepo.deleteLigneCommandeWithoutCommande();
+    }
+    @Override
+    public List<LigneCommande> getLignesCommandeByCommande(Long idCommande) {
+        return ligneCommandeRepo.findByCommandeId(idCommande);
+    }
+
 
     @Override
     public void modifierLigneCommande(Long id, LigneCommande ligneCommande) {
@@ -90,6 +96,7 @@ public class LogistiqueService implements ILogistiqueService {
             nouvelleCommande.setIdfournisseur(null);
             nouvelleCommande.setDateCreation(new Date());
             nouvelleCommande.setPrixTotal(0);
+            nouvelleCommande.setStatus(Status.En_attente);
 
             // Sauvegarde initiale de la commande
             nouvelleCommande = commandeRepo.save(nouvelleCommande);
@@ -121,5 +128,10 @@ public class LogistiqueService implements ILogistiqueService {
             e.printStackTrace();  // Afficher l'erreur complète dans les logs
             throw new RuntimeException("Erreur interne du serveur : " + e.getMessage());
         }
+    }
+
+    @Override
+    public List<Commande> getAllCommande() {
+        return commandeRepo.findAll();
     }
 }

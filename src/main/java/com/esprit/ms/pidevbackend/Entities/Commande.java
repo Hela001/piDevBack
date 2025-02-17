@@ -23,5 +23,7 @@ public class Commande {
     List<LigneCommande> ligneCommandes ;
     Long idfournisseur ;
     Date dateCreation ;
+    @Enumerated(EnumType.STRING)
+    Status status ;
 }
 

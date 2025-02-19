@@ -1,0 +1,53 @@
+package com.esprit.ms.pidevbackend.Entities;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+import java.util.Date;
+import java.util.List;
+
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
+@ToString
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class Mission {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    int idMission;
+
+    String nom;
+    String description;
+
+    Date startDate;
+    Date finishDate;
+
+    @Enumerated(EnumType.STRING)
+    Status etatMission;
+
+    @Enumerated(EnumType.STRING)
+    Priorite priorite;
+
+    Double budget;
+
+    @ManyToOne
+    @JsonIgnore
+    Projet projet;
+
+    @OneToMany(mappedBy = "mission", cascade = CascadeType.ALL)
+    @JsonIgnore
+    List<Tache> taches;
+
+    // Stocker uniquement les IDs des utilisateurs assignés à la mission
+    @ElementCollection
+    @CollectionTable(name = "mission_utilisateurs", joinColumns = @JoinColumn(name = "mission_id"))
+    @Column(name = "utilisateur_id")
+    List<Integer> utilisateursIds;
+
+    // Stocker uniquement l'ID du responsable de la mission
+    private Integer responsableId;
+}

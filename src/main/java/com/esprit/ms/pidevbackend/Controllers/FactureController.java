@@ -18,30 +18,30 @@ public class FactureController {
     IFactureService iFactureService;
 
     @Operation(description="recuperer le bloc de la base de donné")
-    @PostMapping("/addfacture")
+    @PostMapping
     public Facture AjoutFacture (@RequestBody Facture facture) {
         return iFactureService.addFacture(facture);
     }
 
-    @GetMapping("/getFacture/{id}")
+    @GetMapping("/{id}")
     public Facture GetFactureById(@PathVariable ("id") Long idFacture){
         return iFactureService.getFactureById(idFacture);
     }
 
 
-    @GetMapping("/getAll")
+    @GetMapping
     public List<Facture> getAllFactures(){
         return iFactureService.getAllFactures();
     }
 
 
-    @DeleteMapping("/deleteFacture/{id}")
+    @DeleteMapping("/{id}")
     public void DeleteFacture (@PathVariable("id") Long idFacture) {
         iFactureService.deleteFacture(idFacture);
     }
 
 
-    @PutMapping("/modifyFacture")
+    @PutMapping
     public Facture updateFacture(@RequestBody Facture f) {
         return iFactureService.updateFacture(f);
     }

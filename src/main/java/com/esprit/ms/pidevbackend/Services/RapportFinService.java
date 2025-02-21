@@ -18,7 +18,7 @@ public class RapportFinService implements IRapportFinService{
     }
 
     @Override
-    public RapportFinancier getRapport(Long idRapport) {
+    public RapportFinancier getRapportById(Long idRapport) {
         return null;
     }
 

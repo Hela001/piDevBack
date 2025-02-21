@@ -23,7 +23,7 @@ public class Paiement {
     Long idContrat ;
     float  montant ;
     Date datePaiement ;
-    methodePaiement  Payment;
+    methodePaiement  payment;
     int  numeroCarte ;
 
     @OneToOne(mappedBy = "paiement")

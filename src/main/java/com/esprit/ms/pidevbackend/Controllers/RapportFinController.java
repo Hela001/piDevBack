@@ -1,4 +1,6 @@
 package com.esprit.ms.pidevbackend.Controllers;
+import com.esprit.ms.pidevbackend.Entities.RapportFinancier;
+import com.esprit.ms.pidevbackend.Services.IRapportFinService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import com.esprit.ms.pidevbackend.Entities.Facture;
@@ -15,35 +17,35 @@ import java.util.List;
 @Tag(name = "Gestion du rapporting ")
 public class RapportFinController {
     @Autowired
-    IFactureService iFactureService;
+    IRapportFinService iRapportFinService;
 
-    @Operation(description="recuperer le bloc de la base de donné")
-    @PostMapping("addfacture")
-    public Facture AjoutFacture (@RequestBody Facture facture) {
-        return iFactureService.addFacture(facture);
+    @Operation(description="recuperer le rapport de la base de donné")
+    @PostMapping("add")
+    public RapportFinancier AjoutRapportFinancier (@RequestBody RapportFinancier RF) {
+        return iRapportFinService.addRapport(RF);
     }
 
-    @GetMapping("getFacture/{id}")
-    public Facture GetFactureById(@PathVariable ("id") Long idFacture){
-        return iFactureService.getFactureById(idFacture);
+    @GetMapping("getRapport/{id}")
+    public RapportFinancier GetRapportById(@PathVariable ("id") Long idRapport){
+        return iRapportFinService.getRapportById(idRapport);
     }
 
 
     @GetMapping("getAll")
-    public List<Facture> getAllFactures(){
-        return iFactureService.getAllFactures();
+    public List<RapportFinancier> getAllRapport(){
+        return iRapportFinService.getAllRapport();
     }
 
 
-    @DeleteMapping("deleteFacture/{id}")
-    public void DeleteFacture (@PathVariable("id") Long idFacture) {
-        iFactureService.deleteFacture(idFacture);
+    @DeleteMapping("deleteRapport/{id}")
+    public void DeleteRapport (@PathVariable("id") Long idRapport) {
+        iRapportFinService.deleteRapport(idRapport);
     }
 
 
-    @PutMapping("/modifyFacture")
-    public Facture updateFacture(@RequestBody Facture f) {
-        return iFactureService.updateFacture(f);
+    @PutMapping("/modifyRapport")
+    public RapportFinancier updateRapport(@RequestBody RapportFinancier Rp) {
+        return iRapportFinService.modifyRapport(Rp);
     }
 }
 

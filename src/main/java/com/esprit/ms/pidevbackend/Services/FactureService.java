@@ -10,11 +10,15 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class FactureService implements  IFactureService{
+public class FactureService implements IFactureService {
+
     @Autowired
     FactureRepo factureRepo;
-    public Facture addFacture (Facture facture) {
-        return  factureRepo.save(facture);
+
+    @Override
+    public Facture addFacture(Facture facture) {
+        // Les champs idCommande, idResponsableLogistique, idFournisseur, idUtilisateur sont optionnels
+        return factureRepo.save(facture);
     }
 
     @Override
@@ -24,23 +28,16 @@ public class FactureService implements  IFactureService{
 
     @Override
     public Facture getFactureById(Long idFacture) {
-        return factureRepo.findById(idFacture).get();
+        return factureRepo.findById(idFacture).orElse(null);
     }
 
     @Override
     public void deleteFacture(Long idFacture) {
         factureRepo.deleteById(idFacture);
-
     }
 
     @Override
-    public Facture updateFacture( Facture f) {
-        return factureRepo.save(f);
-
+    public Facture updateFacture(Long idFacture, Facture facture) {
+        return factureRepo.save( facture);
     }
-
-
-
-
-
 }

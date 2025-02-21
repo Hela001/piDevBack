@@ -1,4 +1,5 @@
 package com.esprit.ms.pidevbackend.Controllers;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import com.esprit.ms.pidevbackend.Entities.Facture;
@@ -14,36 +15,36 @@ import java.util.List;
 @RequestMapping("Api/facture")
 @Tag(name = "Gestion Facturation")
 public class FactureController {
-    @Autowired
-    IFactureService iFactureService;
 
-    @Operation(description="recuperer le bloc de la base de donné")
+    @Autowired
+    private IFactureService iFactureService;
+
+    @Operation(description = "Ajouter une facture")
     @PostMapping
-    public Facture AjoutFacture (@RequestBody Facture facture) {
+    public Facture AjoutFacture(@RequestBody Facture facture) {
         return iFactureService.addFacture(facture);
     }
 
+    @Operation(description = "Récupérer une facture par son ID")
     @GetMapping("/{id}")
-    public Facture GetFactureById(@PathVariable ("id") Long idFacture){
+    public Facture GetFactureById(@PathVariable("id") Long idFacture) {
         return iFactureService.getFactureById(idFacture);
     }
 
-
+    @Operation(description = "Récupérer toutes les factures")
     @GetMapping
-    public List<Facture> getAllFactures(){
+    public List<Facture> getAllFactures() {
         return iFactureService.getAllFactures();
     }
 
-
+    @Operation(description = "Supprimer une facture par son ID")
     @DeleteMapping("/{id}")
-    public void DeleteFacture (@PathVariable("id") Long idFacture) {
+    public void DeleteFacture(@PathVariable("id") Long idFacture) {
         iFactureService.deleteFacture(idFacture);
     }
 
-
-    @PutMapping
-    public Facture updateFacture(@RequestBody Facture f) {
-        return iFactureService.updateFacture(f);
+    @PutMapping("/{id}")
+    public Facture updateFacture(@PathVariable("id") Long idFacture, @RequestBody Facture facture) {
+        return iFactureService.updateFacture(idFacture, facture);
     }
 }
-

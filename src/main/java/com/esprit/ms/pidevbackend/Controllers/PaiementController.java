@@ -19,33 +19,34 @@ public class PaiementController {
     IPaiemetService iPaiemetService ;
 
     @Operation(description="Ajouter un paiement dans la base de données")
-    @PostMapping("/add")
+    @PostMapping
     public Paiement addPaiement(@RequestBody Paiement p) {
         return iPaiemetService.addPaiement(p);
     }
 
-//    @Operation(description="Récupérer paiement par ID")
-//    @GetMapping("/get/{id}")
-//    public Paiement getPaiement(@PathVariable("id") Long idPaiement) {
-//        return idPaiement.getPaiement(idPaiement);
-//    }
+    @Operation(description="Récupérer paiement par ID")
+    @GetMapping("/{id}")
+    public Paiement getPaiement(@PathVariable("id") Long idPaiement) {
+        return iPaiemetService.getPaiement(idPaiement);
+    }
 
     @Operation(description="Récupérer toutes les paiements")
-    @GetMapping("/getAll")
+    @GetMapping
     public List<Paiement> getAllPaiement() {
         return iPaiemetService.getAllPaiement();
     }
 
-//    @Operation(description="Supprimer un paiemnt par ID")
-//    @DeleteMapping("/delete/{id}")
-//    public void deletePaiement(@PathVariable("id") Long idPaiement) {
-//        idPaiement.deletePaiement(idPaiement);
-//    }
+    @Operation(description="Supprimer un paiemnt par ID")
+    @DeleteMapping("/{id}")
+    public void deletePaiement(@PathVariable("id") Long idPaiement) {
+        iPaiemetService.deletePaiement(idPaiement);
+    }
 
     @Operation(description="Modifier paiement")
-    @PutMapping("/modify")
+    @PutMapping
     public Paiement modifyPaiement(@RequestBody Paiement p) {
         return iPaiemetService.modifyPaiement(p);
     }
+
 }
 

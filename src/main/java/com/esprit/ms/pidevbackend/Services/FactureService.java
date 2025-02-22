@@ -1,6 +1,8 @@
 package com.esprit.ms.pidevbackend.Services;
 
+import com.esprit.ms.pidevbackend.Entities.Commande;
 import com.esprit.ms.pidevbackend.Entities.Facture;
+import com.esprit.ms.pidevbackend.Repositories.CommandeRepo;
 import com.esprit.ms.pidevbackend.Repositories.FactureRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,4 +42,6 @@ public class FactureService implements IFactureService {
     public Facture updateFacture(Long idFacture, Facture facture) {
         return factureRepo.save( facture);
     }
+
+
 }

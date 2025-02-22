@@ -24,6 +24,7 @@ public class Fiche_de_paie {
     Long idUtilisateur ;
     float  montantInitial ;
     int  joursTravailles ;
+    @Enumerated(EnumType.STRING)
     methodePaiement  TypePaiement ;
     Date datePaiement ;
 

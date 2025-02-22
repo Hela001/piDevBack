@@ -5,5 +5,5 @@ public enum methodePaiement {
     ESPECES ,
     CHÈQUE ,
     VIREMENT ,
-    DÉPÔT
+
 }

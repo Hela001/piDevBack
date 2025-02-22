@@ -23,6 +23,7 @@ public class Paiement {
     Long idContrat ;
     float  montant ;
     Date datePaiement ;
+    @Enumerated(EnumType.STRING)
     methodePaiement  payment;
     int  numeroCarte ;
 

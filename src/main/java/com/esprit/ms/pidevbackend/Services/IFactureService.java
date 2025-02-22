@@ -1,5 +1,6 @@
 package com.esprit.ms.pidevbackend.Services;
 
+import com.esprit.ms.pidevbackend.Entities.Commande;
 import com.esprit.ms.pidevbackend.Entities.Facture;
 
 import java.util.List;
@@ -10,4 +11,5 @@ public interface IFactureService {
     Facture getFactureById(Long idFacture);
     void deleteFacture(Long idFacture);
     Facture updateFacture(Long idFacture, Facture facture);
+
 }

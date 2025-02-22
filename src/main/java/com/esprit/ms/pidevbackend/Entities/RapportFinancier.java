@@ -21,6 +21,7 @@ public class RapportFinancier {
     Long idUtilisateur ;
     double  dépense ;
     float  montantInitial ;
+    @Enumerated(EnumType.STRING)
     State  statut ;
 
     /** Les relations **/

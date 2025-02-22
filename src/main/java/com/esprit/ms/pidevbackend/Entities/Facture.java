@@ -29,7 +29,8 @@ public class Facture {
     Date dateEcheance ;
     double montantTotalHorsTaxe ;
     double tva ;
-
+    @Enumerated(EnumType.STRING) // Pour stocker le statut sous forme de chaîne
+    private FactureStatus status; // Enum pour les statuts
     /** Les relations **/
     @ManyToOne
     @JsonIgnore
@@ -39,5 +40,10 @@ public class Facture {
     @OneToOne
     @JsonIgnore
     Paiement paiement;
+
+
+    @OneToOne
+    Commande commande;
+
 
 }

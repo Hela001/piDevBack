@@ -21,6 +21,7 @@ public class Paiement {
     Long idPaiement ;
     Long idUtilisateur ;
     Long idContrat ;
+    Long  idFacture ;
     float  montant ;
     Date datePaiement ;
     @Enumerated(EnumType.STRING)

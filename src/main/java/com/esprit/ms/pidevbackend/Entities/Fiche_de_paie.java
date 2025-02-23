@@ -23,10 +23,14 @@ public class Fiche_de_paie {
     Long idContrat ;
     Long idUtilisateur ;
     float  montantInitial ;
+    float  montantFinal ;
     int  joursTravailles ;
+    String nom;
     @Enumerated(EnumType.STRING)
     methodePaiement  TypePaiement ;
     Date datePaiement ;
+    @Enumerated(EnumType.STRING) // Pour stocker le statut sous forme de chaîne
+    private FactureStatus statutPaiementL; // Enum pour les statuts
 
 
     /** Les relations **/

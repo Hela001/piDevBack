@@ -5,6 +5,7 @@ import com.esprit.ms.pidevbackend.Entities.Fiche_de_paie;
 import com.esprit.ms.pidevbackend.Services.IFicheDePaieService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,33 +19,40 @@ public class Fiche_De_PaiesController {
     IFicheDePaieService iFicheDePaieService;
 
     @Operation(description="Ajouter une fiche de paie dans la base de données")
-    @PostMapping("/add")
+    @PostMapping
     public Fiche_de_paie addFicheDePaie(@RequestBody Fiche_de_paie ficheDePaie) {
         return iFicheDePaieService.addFicheDePaie(ficheDePaie);
     }
 
     @Operation(description="Récupérer une fiche de paie par ID")
-    @GetMapping("/get/{id}")
+    @GetMapping("/{id}")
     public Fiche_de_paie getFicheDePaie(@PathVariable("id") Long idBulletinPaie) {
         return iFicheDePaieService.getFicheDePaieById(idBulletinPaie);
     }
 
     @Operation(description="Récupérer toutes les fiches de paie")
-    @GetMapping("/getAll")
+    @GetMapping
     public List<Fiche_de_paie> getAllFichesDePaie() {
         return iFicheDePaieService.getAllFichesDePaie();
     }
 
     @Operation(description="Supprimer une fiche de paie par ID")
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public void deleteFicheDePaie(@PathVariable("id") Long idBulletinPaie) {
         iFicheDePaieService.deleteFicheDePaie(idBulletinPaie);
     }
 
-    @Operation(description="Modifier une fiche de paie")
-    @PutMapping("/modify")
+   /**
+    *  @Operation(description="Modifier une fiche de paie")
+    @PutMapping
     public Fiche_de_paie modifyFicheDePaie(@RequestBody Fiche_de_paie ficheDePaie) {
         return iFicheDePaieService.updateFicheDePaie(ficheDePaie);
+    }
+    **/
+    @PutMapping("/{id}")
+    public ResponseEntity<Fiche_de_paie> updateFicheDePaie(@PathVariable("id") Long idBulletinPaie, @RequestBody Fiche_de_paie ficheDePaie) {
+        Fiche_de_paie updatedFiche = iFicheDePaieService.updateFicheDePaie(idBulletinPaie, ficheDePaie);
+        return ResponseEntity.ok(updatedFiche);
     }
 
 }

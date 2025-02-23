@@ -34,7 +34,13 @@ public class FicheDePaieService implements IFicheDePaieService {
     }
 
     @Override
+    public Fiche_de_paie updateFicheDePaie(Long idBulletinPaie, Fiche_de_paie ficheDePaie) {
+        return ficheDePaieRepo.save(ficheDePaie);
+    }
+/**
+    @Override
     public Fiche_de_paie updateFicheDePaie(Fiche_de_paie ficheDePaie) {
         return ficheDePaieRepo.save(ficheDePaie);
     }
+    **/
 }

@@ -3,9 +3,11 @@ package com.esprit.ms.pidevbackend.Controllers;
 import com.esprit.ms.pidevbackend.Entities.Projet;
 import com.esprit.ms.pidevbackend.Services.ProjetServices;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/projets")
@@ -14,34 +16,39 @@ public class ProjetController {
     @Autowired
     private ProjetServices projetService;
 
-    // Obtenir tous les projets
-
+    // 🔍 Obtenir tous les projets
     @GetMapping
-    public List<Projet> getAllProjets() {
-       return projetService.getAllProjets();
+    public ResponseEntity<List<Projet>> getAllProjets() {
+        List<Projet> projets = projetService.getAllProjets();
+        return ResponseEntity.ok(projets);  // Renvoie 200 OK
     }
 
-    // Obtenir un projet par ID
+    // 🔍 Obtenir un projet par ID
     @GetMapping("/{id}")
-    public Projet getProjetById(@PathVariable Long id) {
-        return projetService.getProjetById(id);
+    public ResponseEntity<Projet> getProjetById(@PathVariable Long id) {
+        Optional<Projet> projet = Optional.ofNullable(projetService.getProjetById(id));
+        return projet.map(ResponseEntity::ok)  // Si trouvé : 200 OK
+                .orElseGet(() -> ResponseEntity.notFound().build());  // Sinon : 404 Not Found
     }
 
-    // Ajouter un projet
+    // ➕ Ajouter un projet
     @PostMapping
-    public Projet addProjet(@RequestBody Projet projet) {
-        return projetService.addProjet(projet);
+    public ResponseEntity<Projet> addProjet(@RequestBody Projet projet) {
+        Projet newProjet = projetService.addProjet(projet);
+        return ResponseEntity.ok(newProjet);  // 200 OK (ou 201 Created si tu préfères)
     }
 
-    // Mettre à jour un projet
+    // ✏️ Mettre à jour un projet
     @PutMapping("/{id}")
-    public Projet updateProjet(@PathVariable Long id, @RequestBody Projet projet) {
-        return projetService.updateProjet(id, projet);
+    public ResponseEntity<Projet> updateProjet(@PathVariable Long id, @RequestBody Projet projet) {
+        Projet updatedProjet = projetService.updateProjet(id, projet);
+        return updatedProjet != null ? ResponseEntity.ok(updatedProjet) : ResponseEntity.notFound().build();
     }
 
-    // Supprimer un projet
+    // ❌ Supprimer un projet
     @DeleteMapping("/{id}")
-    public void deleteProjet(@PathVariable Long id) {
-        projetService.deleteProjet(id);
+    public ResponseEntity<Void> deleteProjet(@PathVariable Long id) {
+        boolean deleted = projetService.deleteProjet(id);
+        return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 }

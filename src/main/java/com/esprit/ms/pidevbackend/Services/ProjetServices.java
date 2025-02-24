@@ -38,7 +38,8 @@ public class ProjetServices implements IProjetServices {
     }
 
     @Override
-    public void deleteProjet(Long id) {
+    public boolean deleteProjet(Long id) {
         projetRepository.deleteById(id);
+        return true;
     }
 }

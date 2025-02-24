@@ -9,5 +9,5 @@ public interface IProjetServices {
     public Projet getProjetById(Long id);
     Projet addProjet(Projet projet);
     Projet updateProjet(Long id, Projet projet);
-    void deleteProjet(Long id);
+    boolean deleteProjet(Long id);
 }

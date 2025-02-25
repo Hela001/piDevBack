@@ -26,6 +26,47 @@ public class Fiche_de_paie {
     float  montantFinal ;
     int  joursTravailles ;
     String nom;
+
+
+
+    public float getMontantInitial() {
+        return montantInitial;
+    }
+
+
+    public float getMontantFinal() {
+        return montantFinal;
+    }
+
+    public void setMontantFinal(float montantFinal) {
+        this.montantFinal = montantFinal;
+    }
+
+    public int getJoursTravailles() {
+        return joursTravailles;
+    }
+
+    public String getNom() {
+        return nom;
+    }
+
+
+    public methodePaiement getTypePaiement() {
+        return TypePaiement;
+    }
+
+
+    public Date getDatePaiement() {
+        return datePaiement;
+    }
+
+
+    public FactureStatus getStatutPaiementL() {
+        return statutPaiementL;
+    }
+
+
+
     @Enumerated(EnumType.STRING)
     methodePaiement  TypePaiement ;
     Date datePaiement ;

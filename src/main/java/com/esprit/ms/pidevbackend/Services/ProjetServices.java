@@ -2,6 +2,7 @@ package com.esprit.ms.pidevbackend.Services;
 
 import com.esprit.ms.pidevbackend.Entities.Projet;
 import com.esprit.ms.pidevbackend.Repositories.ProjetRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,4 +43,14 @@ public class ProjetServices implements IProjetServices {
         projetRepository.deleteById(id);
         return true;
     }
+    public Projet getProjetWithMissions(Long projetId) {
+        Projet projet = projetRepository.findById(projetId)
+                .orElseThrow(() -> new EntityNotFoundException("Projet non trouvé avec l'ID " + projetId));
+
+        // Accéder aux missions, ce qui déclenchera le chargement des missions si LAZY est utilisé
+        projet.getMissions().size();  // Cela force le chargement des missions (si LAZY)
+
+        return projet;
+    }
+
 }

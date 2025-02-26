@@ -1,6 +1,7 @@
 package com.esprit.ms.pidevbackend.Entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -73,9 +74,10 @@ public class Projet {
    // @Column(name = "valeur")
    // private Map<String, Double> indicateursPerformance;
 
-    @OneToMany(mappedBy = "projet", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private List<Mission> missions;
+    @OneToMany(mappedBy = "projet", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    List<Mission> missions = new ArrayList<>();
+
 
     // Stocker uniquement les IDs des membres de l'équipe
     @ElementCollection

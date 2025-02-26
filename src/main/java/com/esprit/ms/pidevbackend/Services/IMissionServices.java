@@ -7,7 +7,7 @@ import java.util.List;
 public interface IMissionServices {
     List<Mission> getAllMissions();
     Mission getMissionById(Long id);
-    Mission addMission(Mission mission);
+    public Mission createMission(Mission mission, Long projetId);
     Mission updateMission(Long id, Mission mission);
-    void deleteMission(Long id);
-}
+    boolean deleteMission(Long id);
+    List<Mission> findByProjetId(Long projetId);}

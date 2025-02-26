@@ -1,8 +1,8 @@
 package com.esprit.ms.pidevbackend.Entities;
 
 public enum TypeProjet {
-    RESIDENTIEL,
+    RESIDENTIAL,
     COMMERCIAL,
-    INDUSTRIEL,
+    INDUSTRIAL,
     INFRASTRUCTURE
 }

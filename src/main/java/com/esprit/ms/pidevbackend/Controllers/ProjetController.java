@@ -3,6 +3,7 @@ package com.esprit.ms.pidevbackend.Controllers;
 import com.esprit.ms.pidevbackend.Entities.Projet;
 import com.esprit.ms.pidevbackend.Services.ProjetServices;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,5 +51,12 @@ public class ProjetController {
     public ResponseEntity<Void> deleteProjet(@PathVariable Long id) {
         boolean deleted = projetService.deleteProjet(id);
         return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+    }
+
+    // 🔍 Obtenir un projet avec ses missions
+    @GetMapping("/{projetId}/missions")
+    @ResponseStatus(HttpStatus.OK)
+    public Projet getProjetWithMissions(@PathVariable Long projetId) {
+        return projetService.getProjetWithMissions(projetId);
     }
 }

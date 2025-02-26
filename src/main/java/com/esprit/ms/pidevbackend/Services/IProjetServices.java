@@ -10,4 +10,5 @@ public interface IProjetServices {
     Projet addProjet(Projet projet);
     Projet updateProjet(Long id, Projet projet);
     boolean deleteProjet(Long id);
+    public Projet getProjetWithMissions(Long projetId);
 }

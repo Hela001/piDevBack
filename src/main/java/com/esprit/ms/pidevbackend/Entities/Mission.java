@@ -1,5 +1,6 @@
 package com.esprit.ms.pidevbackend.Entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -35,8 +36,11 @@ public class Mission {
     Double budget;
 
     @ManyToOne
-    @JsonIgnore
-    Projet projet;
+    @JoinColumn(name = "id_projet", nullable = false)  // Ensure it's not nullable
+    @JsonBackReference
+    private Projet projet;
+
+
 
     @OneToMany(mappedBy = "mission", cascade = CascadeType.ALL)
     @JsonIgnore

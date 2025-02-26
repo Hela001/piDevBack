@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -45,24 +46,17 @@ public class MissionServices implements IMissionServices {
 
     @Override
     public Mission updateMission(Long id, Mission mission) {
-        // Vérifier que la mission existe avant de la mettre à jour
-        Mission existingMission = missionRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Mission non trouvée avec l'ID : " + id));
-
-        // Mettre à jour les informations de la mission
-        existingMission.setNom(mission.getNom());
-        existingMission.setDescription(mission.getDescription());
-        existingMission.setStartDate(mission.getStartDate());
-        existingMission.setFinishDate(mission.getFinishDate());
-        existingMission.setEtatMission(mission.getEtatMission());
-        existingMission.setPriorite(mission.getPriorite());
-        existingMission.setBudget(mission.getBudget());
-        existingMission.setResponsableId(mission.getResponsableId());
-        existingMission.setUtilisateursIds(mission.getUtilisateursIds());
-        existingMission.setProjet(mission.getProjet());
-
-        return missionRepository.save(existingMission);
+        Optional<Mission> existingMission = missionRepository.findById(id);
+        if (existingMission.isPresent()) {
+            Mission updatedMission = existingMission.get();
+            updatedMission.setNom(mission.getNom());
+            updatedMission.setDescription(mission.getDescription());
+            updatedMission.setEtatMission(mission.getEtatMission());
+            return missionRepository.save(updatedMission);
+        }
+        return null;
     }
+
 
     @Override
     public boolean deleteMission(Long id) {

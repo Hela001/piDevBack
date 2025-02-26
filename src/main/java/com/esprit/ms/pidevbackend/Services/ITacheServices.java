@@ -7,7 +7,7 @@ import java.util.List;
 public interface ITacheServices {
     List<Tache> getAllTaches();
     Tache getTacheById(Long id);
-    Tache addTache(Tache tache);
+    Tache addTache(Tache tache, long id);
     Tache updateTache(Long id, Tache tache);
     void deleteTache(Long id);
 }

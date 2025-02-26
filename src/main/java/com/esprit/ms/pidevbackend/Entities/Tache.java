@@ -1,5 +1,6 @@
 package com.esprit.ms.pidevbackend.Entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -35,7 +36,7 @@ public class Tache {
     Double chargeTravail; // Exemple : en heures
 
     @ManyToOne
-    @JsonIgnore
+    @JsonBackReference
     Mission mission;
 
     // Stocker uniquement l'ID du responsable de la tâche

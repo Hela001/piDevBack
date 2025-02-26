@@ -2,9 +2,12 @@ package com.esprit.ms.pidevbackend.Entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -42,9 +45,9 @@ public class Mission {
 
 
 
-    @OneToMany(mappedBy = "mission", cascade = CascadeType.ALL)
-    @JsonIgnore
-    List<Tache> taches;
+    @OneToMany(mappedBy = "mission", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    List<Tache> taches= new ArrayList<>();
 
     // Stocker uniquement les IDs des utilisateurs assignés à la mission
     @ElementCollection

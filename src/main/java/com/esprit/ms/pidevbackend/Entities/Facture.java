@@ -37,13 +37,11 @@ public class Facture {
     RapportFinancier rapportFinancier;
 
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JsonIgnore
     Paiement paiement;
 
 
-    @OneToOne
-    Commande commande;
 
 
 }

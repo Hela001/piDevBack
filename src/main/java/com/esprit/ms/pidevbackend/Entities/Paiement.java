@@ -21,7 +21,6 @@ public class Paiement {
     Long idPaiement ;
     Long idUtilisateur ;
     Long idContrat ;
-    Long  idFacture ;
     float  montant ;
     Date datePaiement ;
     @Enumerated(EnumType.STRING)
@@ -30,6 +29,14 @@ public class Paiement {
 
     @OneToOne(mappedBy = "paiement")
     @JsonIgnore
-    Facture facture;
+    private Facture facture;
+
+    public void setFacture(Facture facture) {
+        this.facture = facture;
+        if (facture != null) {
+            facture.setPaiement(this); // Mettre à jour la référence dans Facture
+        }
+    }
+
 
 }

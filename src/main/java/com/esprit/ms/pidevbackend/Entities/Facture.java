@@ -40,6 +40,12 @@ public class Facture {
     @OneToOne(cascade = CascadeType.ALL)
     @JsonIgnore
     Paiement paiement;
+    public void setPaiement(Paiement paiement) {
+        this.paiement = paiement;
+        if (paiement != null) {
+            paiement.setFacture(this); // Mettre à jour la référence dans Paiement
+        }
+    }
 
 
 

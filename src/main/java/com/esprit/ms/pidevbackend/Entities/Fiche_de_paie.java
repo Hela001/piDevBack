@@ -24,7 +24,7 @@ public class Fiche_de_paie {
     Long idUtilisateur ;
     float  montantInitial ;
     float  montantFinal ;
-    int  joursTravailles ;
+    int  joursNonTravailles ;
     String nom;
 
 
@@ -43,7 +43,7 @@ public class Fiche_de_paie {
     }
 
     public int getJoursTravailles() {
-        return joursTravailles;
+        return joursNonTravailles;
     }
 
     public String getNom() {

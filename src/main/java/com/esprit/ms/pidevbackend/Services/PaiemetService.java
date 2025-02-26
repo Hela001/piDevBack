@@ -1,8 +1,11 @@
 package com.esprit.ms.pidevbackend.Services;
 
+import com.esprit.ms.pidevbackend.Entities.Facture;
 import com.esprit.ms.pidevbackend.Entities.Paiement;
+import com.esprit.ms.pidevbackend.Repositories.FactureRepo;
 import com.esprit.ms.pidevbackend.Repositories.PaiementRepo;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,7 +13,10 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class PaiemetService implements  IPaiemetService{
+    @Autowired
     PaiementRepo paiementRepo ;
+    FactureRepo factureRepo;
+
 
     @Override
     public Paiement addPaiement(Paiement p) {

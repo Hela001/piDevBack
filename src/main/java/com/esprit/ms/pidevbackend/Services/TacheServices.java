@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -49,14 +50,16 @@ public class TacheServices implements ITacheServices {
         return tacheRepository.save(tache);
     }
 
-    @Override
-    public boolean deleteTache(long id) {
-        if (!tacheRepository.existsById(id)) {  // Vérification correcte avec le bon repository
-            throw new EntityNotFoundException("Tâche non trouvée avec l'ID : " + id);
+    public boolean deleteTache(Long id) {
+        Optional<Tache> tache = tacheRepository.findById(id);
+        if (tache.isPresent()) {
+            tacheRepository.deleteById(id);
+            return true;
+        } else {
+            throw new EntityNotFoundException("Tâche non trouvée");
         }
-        tacheRepository.deleteById(id);
-        return true; // Retourne true si la tâche a été supprimée
     }
+
     public List<Tache> getTasksByMission(long missionId) {
         return tacheRepository.findByMission_idMission(missionId);
     }

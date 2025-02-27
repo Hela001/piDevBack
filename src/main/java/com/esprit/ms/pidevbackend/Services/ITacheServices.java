@@ -9,6 +9,6 @@ public interface ITacheServices {
     Tache getTacheById(Long id);
     Tache addTache(long id,Tache tache) ;
     Tache updateTache(Long id, Tache tache);
-    boolean deleteTache(long id);
+    public boolean deleteTache(Long id);
     public List<Tache> getTasksByMission(long missionId);
 }

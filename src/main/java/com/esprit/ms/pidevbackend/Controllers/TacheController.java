@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/taches")
@@ -25,7 +24,7 @@ public class TacheController {
 
     // Permet de gérer les requêtes OPTIONS pour CORS
     @RequestMapping(method = RequestMethod.OPTIONS)
-    public ResponseEntity<?> handleOptions() {
+    public ResponseEntity<Void> handleOptions() {
         return ResponseEntity.ok().build();
     }
 
@@ -39,23 +38,23 @@ public class TacheController {
     // Récupérer une tâche par son ID
     @GetMapping("/{id}")
     public ResponseEntity<Tache> getTacheById(@PathVariable Long id) {
-        Optional<Tache> tache = Optional.ofNullable(tacheService.getTacheById(id));
-        return tache.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        Tache tache = tacheService.getTacheById(id);
+        return tache != null ? ResponseEntity.ok(tache) : ResponseEntity.notFound().build();
     }
 
     // Ajouter une tâche à une mission spécifique
     @PostMapping("/mission/{missionId}")
-    public ResponseEntity<Tache> addTache(@PathVariable("missionId") long missionId, @RequestBody Tache tache) {
+    public ResponseEntity<Tache> addTache(@PathVariable long missionId, @RequestBody Tache tache) {
         Tache createdTache = tacheService.addTache(missionId, tache);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdTache);
     }
 
-    // Mettre à jour une tâche existante
     @PutMapping("/{id}")
     public ResponseEntity<Tache> updateTache(@PathVariable Long id, @RequestBody Tache tache) {
         Tache updatedTache = tacheService.updateTache(id, tache);
         return updatedTache != null ? ResponseEntity.ok(updatedTache) : ResponseEntity.notFound().build();
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTache(@PathVariable Long id) {
@@ -67,9 +66,10 @@ public class TacheController {
         }
     }
 
+
     // Récupérer toutes les tâches d'une mission spécifique
     @GetMapping("/mission/{missionId}")
-    public ResponseEntity<List<Tache>> getTasksByMission(@PathVariable("missionId") long missionId) {
+    public ResponseEntity<List<Tache>> getTasksByMission(@PathVariable long missionId) {
         List<Tache> taches = tacheService.getTasksByMission(missionId);
         return taches.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(taches);
     }

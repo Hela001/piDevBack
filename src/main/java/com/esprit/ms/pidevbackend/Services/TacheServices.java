@@ -31,7 +31,7 @@ public class TacheServices implements ITacheServices {
     }
 
     @Override
-    public Tache addTache(Tache tache, long idM) {
+    public Tache addTache( long idM,Tache tache) {
         // Récupérer la mission à partir de l'ID idM
         Mission mission = missionRepository.findById(idM).orElse(null);
         if(mission != null) {
@@ -50,11 +50,15 @@ public class TacheServices implements ITacheServices {
     }
 
     @Override
-    public void deleteTache(Long id) {
-        if (!tacheRepository.existsById(id)) {
+    public boolean deleteTache(long id) {
+        if (!tacheRepository.existsById(id)) {  // Vérification correcte avec le bon repository
             throw new EntityNotFoundException("Tâche non trouvée avec l'ID : " + id);
         }
         tacheRepository.deleteById(id);
+        return true; // Retourne true si la tâche a été supprimée
+    }
+    public List<Tache> getTasksByMission(long missionId) {
+        return tacheRepository.findByMission_idMission(missionId);
     }
 }
 

@@ -7,7 +7,8 @@ import java.util.List;
 public interface ITacheServices {
     List<Tache> getAllTaches();
     Tache getTacheById(Long id);
-    Tache addTache(Tache tache, long id);
+    Tache addTache(long id,Tache tache) ;
     Tache updateTache(Long id, Tache tache);
-    void deleteTache(Long id);
+    boolean deleteTache(long id);
+    public List<Tache> getTasksByMission(long missionId);
 }

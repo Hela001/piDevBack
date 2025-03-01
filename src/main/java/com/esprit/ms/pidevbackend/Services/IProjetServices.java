@@ -1,6 +1,7 @@
 package com.esprit.ms.pidevbackend.Services;
 
 import com.esprit.ms.pidevbackend.Entities.Projet;
+import com.esprit.ms.pidevbackend.Entities.Status;
 
 import java.util.List;
 
@@ -11,4 +12,5 @@ public interface IProjetServices {
     Projet updateProjet(Long id, Projet projet);
     boolean deleteProjet(Long id);
     public Projet getProjetWithMissions(Long projetId);
+    public List<Projet> searchProjets(String nom, Status status);
 }

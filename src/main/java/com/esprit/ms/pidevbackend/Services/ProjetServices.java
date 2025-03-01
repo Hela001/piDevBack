@@ -1,6 +1,7 @@
 package com.esprit.ms.pidevbackend.Services;
 
 import com.esprit.ms.pidevbackend.Entities.Projet;
+import com.esprit.ms.pidevbackend.Entities.Status;
 import com.esprit.ms.pidevbackend.Repositories.ProjetRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
@@ -51,6 +52,9 @@ public class ProjetServices implements IProjetServices {
         projet.getMissions().size();  // Cela force le chargement des missions (si LAZY)
 
         return projet;
+    }
+    public List<Projet> searchProjets(String nom, Status status) {
+        return projetRepository.searchProjet(nom, status);
     }
 
 }

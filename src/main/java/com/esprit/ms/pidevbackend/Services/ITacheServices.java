@@ -1,5 +1,7 @@
 package com.esprit.ms.pidevbackend.Services;
 
+import com.esprit.ms.pidevbackend.Entities.Priorite;
+import com.esprit.ms.pidevbackend.Entities.Status;
 import com.esprit.ms.pidevbackend.Entities.Tache;
 
 import java.util.List;
@@ -11,4 +13,5 @@ public interface ITacheServices {
     Tache updateTache(Long id, Tache tache);
     public boolean deleteTache(Long id);
     public List<Tache> getTasksByMission(long missionId);
+    public List<Tache> searchTaches(String nom, Status etat, Priorite priorite);
 }

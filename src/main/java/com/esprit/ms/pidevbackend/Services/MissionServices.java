@@ -2,6 +2,7 @@ package com.esprit.ms.pidevbackend.Services;
 
 import com.esprit.ms.pidevbackend.Entities.Mission;
 import com.esprit.ms.pidevbackend.Entities.Projet;
+import com.esprit.ms.pidevbackend.Entities.Status;
 import com.esprit.ms.pidevbackend.Repositories.MissionRepository;
 import com.esprit.ms.pidevbackend.Repositories.ProjetRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -70,5 +71,8 @@ public class MissionServices implements IMissionServices {
     @Override
     public List<Mission> findByProjetId(Long projetId) {
         return missionRepository.findByProjet_IdProjet(projetId);  // Appel de la méthode du repository
+    }
+    public List<Mission> searchMissions(Long projetId, Status etatMission, String searchText) {
+        return missionRepository.searchMissions(projetId, etatMission, searchText);
     }
 }

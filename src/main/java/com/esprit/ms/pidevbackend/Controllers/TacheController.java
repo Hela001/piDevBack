@@ -1,5 +1,7 @@
 package com.esprit.ms.pidevbackend.Controllers;
 
+import com.esprit.ms.pidevbackend.Entities.Priorite;
+import com.esprit.ms.pidevbackend.Entities.Status;
 import com.esprit.ms.pidevbackend.Entities.Tache;
 import com.esprit.ms.pidevbackend.Services.TacheServices;
 import jakarta.persistence.EntityNotFoundException;
@@ -64,6 +66,13 @@ public class TacheController {
         } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
+    }
+    @GetMapping("/search")
+    public List<Tache> searchTaches(
+            @RequestParam(required = false) String nom,
+            @RequestParam(required = false) Status etat,
+            @RequestParam(required = false) Priorite priorite) {
+        return tacheService.searchTaches(nom, etat, priorite);
     }
 
 

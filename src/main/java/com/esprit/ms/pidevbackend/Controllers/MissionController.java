@@ -1,6 +1,7 @@
 package com.esprit.ms.pidevbackend.Controllers;
 
 import com.esprit.ms.pidevbackend.Entities.Mission;
+import com.esprit.ms.pidevbackend.Entities.Status;
 import com.esprit.ms.pidevbackend.Services.IMissionServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -61,5 +62,12 @@ public class MissionController {
     public ResponseEntity<List<Mission>> getMissionsByProjetId(@PathVariable Long projetId) {
         List<Mission> missions = iMissionServices.findByProjetId(projetId);
         return missions.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(missions);
+    }
+    @GetMapping("/search")
+    public List<Mission> searchMissions(
+            @RequestParam Long projetId,
+            @RequestParam(required = false) Status etatMission,
+            @RequestParam(required = false) String searchText) {
+        return iMissionServices.searchMissions(projetId, etatMission, searchText);
     }
 }

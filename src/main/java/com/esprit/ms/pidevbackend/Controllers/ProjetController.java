@@ -1,6 +1,7 @@
 package com.esprit.ms.pidevbackend.Controllers;
 
 import com.esprit.ms.pidevbackend.Entities.Projet;
+import com.esprit.ms.pidevbackend.Entities.Status;
 import com.esprit.ms.pidevbackend.Services.ProjetServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -58,5 +59,11 @@ public class ProjetController {
     @ResponseStatus(HttpStatus.OK)
     public Projet getProjetWithMissions(@PathVariable Long projetId) {
         return projetService.getProjetWithMissions(projetId);
+    }
+    @GetMapping("/search")
+    public List<Projet> searchProjets(
+            @RequestParam(required = false) String nom,
+            @RequestParam(required = false) Status status) {
+        return projetService.searchProjets(nom, status);
     }
 }

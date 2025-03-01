@@ -1,6 +1,8 @@
 package com.esprit.ms.pidevbackend.Services;
 
 import com.esprit.ms.pidevbackend.Entities.Mission;
+import com.esprit.ms.pidevbackend.Entities.Priorite;
+import com.esprit.ms.pidevbackend.Entities.Status;
 import com.esprit.ms.pidevbackend.Entities.Tache;
 import com.esprit.ms.pidevbackend.Repositories.MissionRepository;
 import com.esprit.ms.pidevbackend.Repositories.TacheRepository;
@@ -62,6 +64,9 @@ public class TacheServices implements ITacheServices {
 
     public List<Tache> getTasksByMission(long missionId) {
         return tacheRepository.findByMission_idMission(missionId);
+    }
+    public List<Tache> searchTaches(String nom, Status etat, Priorite priorite) {
+        return tacheRepository.searchTaches(nom, etat, priorite);
     }
 }
 

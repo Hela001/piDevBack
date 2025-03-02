@@ -13,30 +13,37 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@FieldDefaults(level=AccessLevel.PRIVATE)
-
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Paiement {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id
-    Long idPaiement ;
-    Long idUtilisateur ;
-    Long idContrat ;
-    float  montant ;
-    Date datePaiement ;
-    @Enumerated(EnumType.STRING)
-    methodePaiement  payment;
-    int  numeroCarte ;
 
-    @OneToOne(mappedBy = "paiement")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long idPaiement;
+
+    Long idUtilisateur;
+    Long idContrat;
+    float montant;
+
+    @Temporal(TemporalType.DATE)
+    Date datePaiement;
+
+    @Enumerated(EnumType.STRING)
+    methodePaiement payment;
+
+    int numeroCarte;
+
+    @OneToOne(mappedBy = "paiement", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private Facture facture;
 
-    public void setFacture(Facture facture) {
-        this.facture = facture;
-        if (facture != null) {
-            facture.setPaiement(this); // Mettre à jour la référence dans Facture
-        }
+    public Facture getFacture() {
+        return facture;
     }
 
-
+    public void setFacture(Facture facture) {
+        this.facture = facture;
+        if (facture != null && facture.getPaiement() != this) {
+            facture.setPaiement(this);
+        }
+    }
 }

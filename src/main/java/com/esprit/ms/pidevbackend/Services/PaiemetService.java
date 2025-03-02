@@ -19,7 +19,9 @@ public class PaiemetService implements  IPaiemetService{
 
 
     @Override
-    public Paiement addPaiement(Paiement p) {
+    public Paiement addPaiement(Paiement p, long idP) {
+        Facture facture = factureRepo.findById(idP).orElseThrow(() -> new RuntimeException("Facture non trouvée"));
+        p.setFacture(facture); // Associer le paiement à la facture
         return paiementRepo.save(p);
     }
 

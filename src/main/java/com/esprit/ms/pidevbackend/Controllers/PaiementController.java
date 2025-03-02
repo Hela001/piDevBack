@@ -6,24 +6,31 @@ import com.esprit.ms.pidevbackend.Entities.Paiement;
 import com.esprit.ms.pidevbackend.Services.IPaiemetService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@AllArgsConstructor
 @RequestMapping("Api/paiement")
-@Tag(name = "Gestion de paiement")
 
 public class PaiementController {
     @Autowired
     IPaiemetService iPaiemetService ;
 
-    @Operation(description="Ajouter un paiement dans la base de données")
-    @PostMapping
-    public Paiement addPaiement(@RequestBody Paiement p) {
-        return iPaiemetService.addPaiement(p);
+
+    @PostMapping("/facture/{idFacture}")
+    public ResponseEntity<?> addPaiement(@RequestBody Paiement paiement, @PathVariable Long idFacture) {
+        // Vérifie que les données reçues sont valides
+        if (paiement.getMontant() <= 0) {
+            return ResponseEntity.badRequest().body("Montant invalide.");
+        }
+        // Enregistrement du paiement
+        iPaiemetService.addPaiement(paiement, idFacture);
+        return ResponseEntity.ok(paiement);
     }
+
+
 
     @Operation(description="Récupérer paiement par ID")
     @GetMapping("/{id}")

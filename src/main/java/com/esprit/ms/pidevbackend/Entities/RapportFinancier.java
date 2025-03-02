@@ -20,7 +20,7 @@ public class RapportFinancier {
     Long  idRapport ;
     Long idUtilisateur ;
     double  dépense ;
-    float  montantInitial ;
+    float  Salaire ;
     @Enumerated(EnumType.STRING)
     State  statut ;
 

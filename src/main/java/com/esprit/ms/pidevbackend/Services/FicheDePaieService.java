@@ -27,10 +27,15 @@ public class FicheDePaieService implements IFicheDePaieService {
         return ficheDePaieRepo.findById(idBulletinPaie).orElse(null);
     }
 
-    @Override
+  @Override
     public List<Fiche_de_paie> getAllFichesDePaie() {
         return ficheDePaieRepo.findAll();
     }
+  /*
+  public List<Fiche_de_paie> getAllFichesDePaie() {
+        return ficheDePaieRepo.findAllByOrderByIdBulletinPaieDesc();
+    }
+    */
 
     @Override
     public void deleteFicheDePaie(Long idBulletinPaie) {
@@ -95,4 +100,5 @@ public Fiche_de_paie calculerSalaire(Long idBulletinPaie) {
             }
         }
     }
+
 }

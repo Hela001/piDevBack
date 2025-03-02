@@ -13,41 +13,48 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@FieldDefaults(level=AccessLevel.PRIVATE)
-
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Facture {
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    Long  idFacture ;
-    Long  idCommande ;
-    Long  idResponsableLogistique ;
-    Long  idFournisseur ;
-    Long idUtilisateur ;
-    double  montantTotal ;
-    Date dateFacture ;
-    Date dateEcheance ;
-    double montantTotalHorsTaxe ;
-    double tva ;
-    @Enumerated(EnumType.STRING) // Pour stocker le statut sous forme de chaîne
-    private FactureStatus status; // Enum pour les statuts
-    /** Les relations **/
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long idFacture;
+
+    Long idCommande;
+    Long idResponsableLogistique;
+    Long idFournisseur;
+    Long idUtilisateur;
+    double montantTotal;
+
+    @Temporal(TemporalType.DATE)
+    Date dateFacture;
+
+    @Temporal(TemporalType.DATE)
+    Date dateEcheance;
+
+    double montantTotalHorsTaxe;
+    double tva;
+
+    @Enumerated(EnumType.STRING)
+    private FactureStatus status;
+
     @ManyToOne
     @JsonIgnore
     RapportFinancier rapportFinancier;
 
-
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JsonIgnore
     Paiement paiement;
-    public void setPaiement(Paiement paiement) {
-        this.paiement = paiement;
-        if (paiement != null) {
-            paiement.setFacture(this); // Mettre à jour la référence dans Paiement
-        }
+
+    // Ajout du getter pour éviter l'erreur
+    public Paiement getPaiement() {
+        return paiement;
     }
 
-
-
-
+    public void setPaiement(Paiement paiement) {
+        this.paiement = paiement;
+        if (paiement != null && paiement.getFacture() != this) {
+            paiement.setFacture(this); // Mise à jour de la relation bidirectionnelle
+        }
+    }
 }

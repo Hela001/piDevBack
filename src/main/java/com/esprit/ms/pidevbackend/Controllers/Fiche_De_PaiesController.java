@@ -34,7 +34,7 @@ public class Fiche_De_PaiesController {
         return iFicheDePaieService.getFicheDePaieById(idBulletinPaie);
     }
 
-    @Operation(description="Récupérer toutes les fiches de paie")
+ @Operation(description="Récupérer toutes les fiches de paie")
     @GetMapping
     public List<Fiche_de_paie> getAllFichesDePaie() {
         return iFicheDePaieService.getAllFichesDePaie();
@@ -102,4 +102,5 @@ public class Fiche_De_PaiesController {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
+
 }

@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -56,5 +58,14 @@ public class ProjetServices implements IProjetServices {
     public List<Projet> searchProjets(String nom, Status status) {
         return projetRepository.searchProjet(nom, status);
     }
+    public Map<String, Long> getProjetStatsByStatus() {
+        List<Projet> projets = projetRepository.findAll();
+
+        Map<String, Long> stats = projets.stream()
+                .collect(Collectors.groupingBy(projet -> projet.getStatus().name(), Collectors.counting()));
+
+        return stats;
+    }
+
 
 }

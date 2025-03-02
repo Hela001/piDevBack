@@ -4,6 +4,7 @@ import com.esprit.ms.pidevbackend.Entities.Projet;
 import com.esprit.ms.pidevbackend.Entities.Status;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IProjetServices {
     List<Projet> getAllProjets();
@@ -13,4 +14,4 @@ public interface IProjetServices {
     boolean deleteProjet(Long id);
     public Projet getProjetWithMissions(Long projetId);
     public List<Projet> searchProjets(String nom, Status status);
-}
+    public Map<String, Long> getProjetStatsByStatus();}

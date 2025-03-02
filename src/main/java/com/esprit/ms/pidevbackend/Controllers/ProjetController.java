@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -66,4 +67,10 @@ public class ProjetController {
             @RequestParam(required = false) Status status) {
         return projetService.searchProjets(nom, status);
     }
+    @GetMapping("/stats")
+    public ResponseEntity<Map<String, Long>> getProjetStats() {
+        Map<String, Long> stats = projetService.getProjetStatsByStatus();
+        return ResponseEntity.ok(stats);  // Renvoie les statistiques des projets par statut
+    }
+
 }

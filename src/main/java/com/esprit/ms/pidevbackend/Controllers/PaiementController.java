@@ -19,8 +19,8 @@ public class PaiementController {
     IPaiemetService iPaiemetService ;
 
 
-    @PostMapping("/facture/{idFacture}")
-    public ResponseEntity<?> addPaiement(@RequestBody Paiement paiement, @PathVariable Long idFacture) {
+    @PostMapping("/{id}")
+    public ResponseEntity<?> addPaiement(@RequestBody Paiement paiement, @PathVariable("id") Long idFacture) {
         // Vérifie que les données reçues sont valides
         if (paiement.getMontant() <= 0) {
             return ResponseEntity.badRequest().body("Montant invalide.");
@@ -55,6 +55,7 @@ public class PaiementController {
     public Paiement modifyPaiement(@RequestBody Paiement p) {
         return iPaiemetService.modifyPaiement(p);
     }
+
 
 }
 

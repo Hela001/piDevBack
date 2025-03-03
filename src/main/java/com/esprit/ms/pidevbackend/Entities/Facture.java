@@ -46,7 +46,32 @@ public class Facture {
     @JsonIgnore
     Paiement paiement;
 
-    // Ajout du getter pour éviter l'erreur
+
+    public double getMontantTotal() {
+        return montantTotal;
+    }
+
+    public Date getDateFacture() {
+        return dateFacture;
+    }
+
+    public Date getDateEcheance() {
+        return dateEcheance;
+    }
+
+    public double getMontantTotalHorsTaxe() {
+        return montantTotalHorsTaxe;
+    }
+
+    public double getTva() {
+        return tva;
+    }
+
+    public FactureStatus getStatus() {
+        return status;
+    }
+
+
     public Paiement getPaiement() {
         return paiement;
     }

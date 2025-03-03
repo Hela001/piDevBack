@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @AllArgsConstructor
@@ -30,6 +31,11 @@ public class FactureController {
     public Facture GetFactureById(@PathVariable("id") Long idFacture) {
         return iFactureService.getFactureById(idFacture);
     }
+    @GetMapping("sendEmail")
+    public String sendEmail(){
+        iFactureService.sendEmail("akremizayneb99@gmail.com","Invoice Added","Invoice");
+   return "Sent successfuly";
+    }
 
     @Operation(description = "Récupérer toutes les factures")
     @GetMapping
@@ -47,4 +53,10 @@ public class FactureController {
     public Facture updateFacture(@PathVariable("id") Long idFacture, @RequestBody Facture facture) {
         return iFactureService.updateFacture(idFacture, facture);
     }
+    @Operation(description = "Récupérer les statistiques des factures")
+    @GetMapping("/statistics")
+    public Map<String, Long> getInvoiceStatistics() {
+        return iFactureService.getInvoiceStatistics();
+    }
+
 }

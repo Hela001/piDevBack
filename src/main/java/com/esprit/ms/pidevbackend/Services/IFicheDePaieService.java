@@ -12,5 +12,6 @@ public interface IFicheDePaieService {
     void deleteFicheDePaie(Long idBulletinPaie);
     Fiche_de_paie updateFicheDePaie(Long idBulletinPaie ,Fiche_de_paie ficheDePaie);
     Fiche_de_paie calculerSalaire(Long idBulletinPaie);
+
     void imprimerFiche(Long idBulletinPaie, HttpServletResponse response);
 }

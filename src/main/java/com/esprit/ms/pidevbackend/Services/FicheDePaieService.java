@@ -82,14 +82,14 @@ public Fiche_de_paie calculerSalaire(Long idBulletinPaie) {
 
                 // Open document and add content
                 document.open();
-                document.add(new Paragraph("Fiche de Paie"));
-                document.add(new Paragraph("Montant Initial: " + fiche.getMontantInitial()));
-                document.add(new Paragraph("Jours Non Travaillés: " + fiche.getJoursTravailles()));
-                document.add(new Paragraph("Type de Paiement: " + fiche.getTypePaiement()));
-                document.add(new Paragraph("Date de Paiement: " + fiche.getDatePaiement()));
-                document.add(new Paragraph("Statut de Paiement: " + fiche.getStatutPaiementL()));
-                document.add(new Paragraph("Montant Final: " + fiche.getMontantFinal()));
-                document.add(new Paragraph("Nom Utilisateur: " + fiche.getNom()));
+                document.add(new Paragraph("Pay Slip"));
+                document.add(new Paragraph("User Name: " + fiche.getNom()));
+                document.add(new Paragraph("Payment Status: " + fiche.getStatutPaiementL()));
+                document.add(new Paragraph("Payment Type: " + fiche.getTypePaiement()));
+                document.add(new Paragraph("Payment Date: " + fiche.getDatePaiement()));
+                document.add(new Paragraph("Initial Amount: " + fiche.getMontantInitial()));
+                document.add(new Paragraph("Days Not Worked: " + fiche.getJoursTravailles()));
+                document.add(new Paragraph("Final Amount: " + fiche.getMontantFinal()));
                 document.close();
 
                 // Flush and close the output stream

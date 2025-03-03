@@ -40,6 +40,10 @@ public class Paiement {
         return facture;
     }
 
+    public float getMontant() {
+        return montant;
+    }
+
     public void setFacture(Facture facture) {
         this.facture = facture;
         if (facture != null && facture.getPaiement() != this) {

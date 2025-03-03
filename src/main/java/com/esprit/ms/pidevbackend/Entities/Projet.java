@@ -1,6 +1,5 @@
 package com.esprit.ms.pidevbackend.Entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -10,7 +9,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Entity
 @Getter
@@ -18,14 +16,14 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@FieldDefaults(level=AccessLevel.PRIVATE)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Projet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long idProjet;
 
     @Column(nullable = false, unique = true)
-    private String nom;
+    private String nom;  // Correction de "name" -> "nom"
 
     @Column(columnDefinition = "TEXT")
     private String description;
@@ -51,14 +49,10 @@ public class Projet {
     private String maitreOeuvre;
     private String entrepreneurPrincipal;
 
-    // Stocker uniquement l'ID du chef de projet
     @Column(nullable = false)
-    private long chefProjetId  = 0L;
+    private long chefProjetId = 0L;
 
     private Boolean permisConstruction;
-
-   // @ElementCollection
-   // private List<String> documentsAnnexes;
 
     private Double progression;
 
@@ -68,24 +62,12 @@ public class Projet {
     @Column(columnDefinition = "TEXT")
     private String contraintes;
 
-  //  @ElementCollection
-   // @CollectionTable(name = "indicateurs_performance", joinColumns = @JoinColumn(name = "projet_id"))
-  //  @MapKeyColumn(name = "indicateur")
-   // @Column(name = "valeur")
-   // private Map<String, Double> indicateursPerformance;
-
     @OneToMany(mappedBy = "projet", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonManagedReference
     List<Mission> missions = new ArrayList<>();
 
-
-    // Stocker uniquement les IDs des membres de l'équipe
     @ElementCollection
     @CollectionTable(name = "projet_membres", joinColumns = @JoinColumn(name = "projet_id"))
     @Column(name = "utilisateur_id")
     private List<Long> membresEquipeIds = new ArrayList<>();
-
-
-
-
 }

@@ -4,10 +4,13 @@ import com.esprit.ms.pidevbackend.Entities.Projet;
 import com.esprit.ms.pidevbackend.Entities.Status;
 import com.esprit.ms.pidevbackend.Services.ProjetServices;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -71,6 +74,15 @@ public class ProjetController {
     public ResponseEntity<Map<String, Long>> getProjetStats() {
         Map<String, Long> stats = projetService.getProjetStatsByStatus();
         return ResponseEntity.ok(stats);  // Renvoie les statistiques des projets par statut
+    }
+    @GetMapping("/{id}/export-pdf")
+    public ResponseEntity<byte[]> exportProjetToPdf(@PathVariable Long id) throws IOException, IOException {
+        byte[] pdfContent = projetService.generateProjetPdf(id);
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_PDF)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=projet_" + id + ".pdf")
+                .body(pdfContent);
     }
 
 }

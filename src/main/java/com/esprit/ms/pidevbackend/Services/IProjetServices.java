@@ -14,4 +14,5 @@ public interface IProjetServices {
     boolean deleteProjet(Long id);
     public Projet getProjetWithMissions(Long projetId);
     public List<Projet> searchProjets(String nom, Status status);
-    public Map<String, Long> getProjetStatsByStatus();}
+    public Map<String, Long> getProjetStatsByStatus();
+    public String getWeatherForecastForProject(Long projetId);}

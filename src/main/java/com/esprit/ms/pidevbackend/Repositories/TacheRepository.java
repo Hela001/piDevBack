@@ -13,13 +13,9 @@ import java.util.List;
 
 public interface TacheRepository extends JpaRepository<Tache,Long> {
     List<Tache> findByMission_idMission(long missionId);
-    // Recherche par nom de tâche (insensible à la casse)
     List<Tache> findByNomContainingIgnoreCase(String nom);
-
-    // Filtrer par état et priorité
     List<Tache> findByEtatTacheAndPriorite(Status etat, Priorite priorite);
 
-    // Recherche avancée (nom + état + priorité)
     @Query("SELECT t FROM Tache t WHERE " +
             "(:nom IS NULL OR LOWER(t.nom) LIKE LOWER(CONCAT('%', :nom, '%'))) " +
             "AND (:etat IS NULL OR t.etatTache = :etat) " +

@@ -84,5 +84,10 @@ public class ProjetController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=projet_" + id + ".pdf")
                 .body(pdfContent);
     }
+    @GetMapping("/{projetId}/weather")
+    public ResponseEntity<String> getProjectWeather(@PathVariable Long projetId) {
+        String weatherData = projetService.getWeatherForecastForProject(projetId);
+        return ResponseEntity.ok(weatherData); // Renvoie les données météo
+    }
 
 }

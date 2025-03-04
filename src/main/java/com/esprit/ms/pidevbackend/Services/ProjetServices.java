@@ -20,7 +20,9 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class ProjetServices implements IProjetServices {
 
-    private final ProjetRepository projetRepository;
+    private  ProjetRepository projetRepository;
+    private WeatherService weatherService;
+
 
     @Override
     public List<Projet> getAllProjets() {
@@ -94,5 +96,14 @@ public class ProjetServices implements IProjetServices {
 
         document.close();
         return out.toByteArray();
+    }
+    public String getWeatherForecastForProject(Long projetId) {
+        Projet projet = projetRepository.findById(projetId)
+                .orElseThrow(() -> new EntityNotFoundException("Projet non trouvé avec l'ID " + projetId));
+
+        double latitude = projet.getLatitude();
+        double longitude = projet.getLongitude();
+
+        return weatherService.getWeatherForecast(latitude, longitude);
     }
 }

@@ -19,32 +19,27 @@ public class Fiche_de_paie {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     Long idBulletinPaie;
-    Long  idRapport ;
     Long idContrat ;
     Long idUtilisateur ;
-    float  montantInitial ;
-    float  montantFinal ;
+     Float montantInitial;
+    Float montantFinal;
     int  joursNonTravailles ;
     String nom;
+    Date datePaiement ;
 
+    @Enumerated(EnumType.STRING)
+    methodePaiement  TypePaiement ;
+    @Enumerated(EnumType.STRING) // Pour stocker le statut sous forme de chaîne
+    private FicheStatus statutPaiementL= FicheStatus.Unpaid; // Enum pour les statuts
 
+    @ManyToOne
+    @JsonIgnore
+    RapportFinancier rapportFinancier;
 
-    public float getMontantInitial() {
-        return montantInitial;
+    public void setStatutPaiementL(FicheStatus statutPaiementL) {
+        this.statutPaiementL = statutPaiementL;
     }
 
-
-    public float getMontantFinal() {
-        return montantFinal;
-    }
-
-    public void setMontantFinal(float montantFinal) {
-        this.montantFinal = montantFinal;
-    }
-
-    public int getJoursTravailles() {
-        return joursNonTravailles;
-    }
 
     public String getNom() {
         return nom;
@@ -61,22 +56,43 @@ public class Fiche_de_paie {
     }
 
 
-    public FactureStatus getStatutPaiementL() {
+    public FicheStatus getStatutPaiementL() {
         return statutPaiementL;
     }
 
 
-
-    @Enumerated(EnumType.STRING)
-    methodePaiement  TypePaiement ;
-    Date datePaiement ;
-    @Enumerated(EnumType.STRING) // Pour stocker le statut sous forme de chaîne
-    private FactureStatus statutPaiementL; // Enum pour les statuts
+ public int getJoursNonTravailles() {
+        return joursNonTravailles;
+    }
 
 
-    /** Les relations **/
-    @ManyToOne
-    @JsonIgnore
-    RapportFinancier rapportFinancier;
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
 
+
+    public Float getMontantInitial() {
+        return montantInitial;
+    }
+
+    public void setDatePaiement(Date datePaiement) {
+        this.datePaiement = datePaiement;
+    }
+
+    public void setMontantInitial(Float montantInitial) {
+        this.montantInitial = montantInitial;
+    }
+
+    public void setTypePaiement(methodePaiement typePaiement) {
+        TypePaiement = typePaiement;
+    }
+
+    public Float getMontantFinal() {
+        return montantFinal;
+    }
+
+    public void setMontantFinal(Float montantFinal) {
+        this.montantFinal = montantFinal;
+    }
 }
+

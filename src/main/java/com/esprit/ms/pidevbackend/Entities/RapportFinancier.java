@@ -22,7 +22,7 @@ public class RapportFinancier {
     double  dépense ;
     float  Salaire ;
     @Enumerated(EnumType.STRING)
-    State  statut ;
+    RapportStatus  status ;
 
     /** Les relations **/
 //(cascade = CascadeType.ALL)

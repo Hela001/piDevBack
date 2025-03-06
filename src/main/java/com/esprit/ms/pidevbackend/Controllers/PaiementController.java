@@ -19,7 +19,7 @@ public class PaiementController {
     IPaiemetService iPaiemetService ;
 
 
-    @PostMapping("addPaiement/{id}")
+    @PostMapping("/{id}")
     public ResponseEntity<?> addPaiement(@RequestBody Paiement paiement, @PathVariable("id") Long idFacture) {
         // Vérifie que le montant reçu est valide (positif)
         if (paiement.getMontant() <= 0) {

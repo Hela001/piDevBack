@@ -14,4 +14,5 @@ public interface IFicheDePaieService {
     Fiche_de_paie calculerSalaire(Long idBulletinPaie);
 
     void imprimerFiche(Long idBulletinPaie, HttpServletResponse response);
+
 }

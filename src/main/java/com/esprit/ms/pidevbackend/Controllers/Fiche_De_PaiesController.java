@@ -30,7 +30,7 @@ public class Fiche_De_PaiesController {
     }
 
     @Operation(description = "Récupérer une fiche de paie par ID")
-    @GetMapping("/{id}/details") // Unique sub-path
+    @GetMapping("/{id}/details")
     public Fiche_de_paie getFicheDePaie(@PathVariable("id") Long idBulletinPaie) {
         return iFicheDePaieService.getFicheDePaieById(idBulletinPaie);
     }
@@ -65,51 +65,9 @@ public class Fiche_De_PaiesController {
         }
     }
 
+    @Operation(description = "Imprimer une fiche de paie")
     @GetMapping("/{id}/print")
     public void imprimerFiche(@PathVariable("id") Long idBulletinPaie, HttpServletResponse response) {
-        try {
-            // Fetch the Fiche_de_paie object from the database
-            Fiche_de_paie fiche = iFicheDePaieService.getFicheDePaieById(idBulletinPaie);
-
-            if (fiche == null) {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND, "Fiche de paie non trouvée");
-                return;
-            }
-
-            // Set response headers for PDF download
-            response.setContentType("application/pdf");
-            response.setHeader("Content-Disposition", "attachment; filename=fiche_de_paie_" + idBulletinPaie + ".pdf");
-
-            // Create the PDF document
-            Document document = new Document();
-            PdfWriter.getInstance(document, response.getOutputStream());
-
-            // Open the document
-            document.open();
-
-            // Add the bordered name
-            PdfPTable table = new PdfPTable(1);
-            PdfPCell cell = new PdfPCell(new Phrase(fiche.getNom()));
-            cell.setBorderWidth(2);
-            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            cell.setPadding(10);
-            table.addCell(cell);
-            document.add(table);
-
-            // Add other details with <h3> styling
-            document.add(new Paragraph(" "));
-            document.add(new Paragraph("Payment Status: " + fiche.getStatutPaiementL(), FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14)));
-            document.add(new Paragraph("Payment Type: " + fiche.getTypePaiement(), FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14)));
-            document.add(new Paragraph("Payment Date: " + fiche.getDatePaiement(), FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14)));
-            document.add(new Paragraph("Initial Amount: " + fiche.getMontantInitial(), FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14)));
-            document.add(new Paragraph("Days Not Worked: " + fiche.getJoursTravailles(), FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14)));
-            document.add(new Paragraph("Final Amount: " + fiche.getMontantFinal(), FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14)));
-
-            // Close document
-            document.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        }
+        iFicheDePaieService.imprimerFiche(idBulletinPaie, response);
     }
 }

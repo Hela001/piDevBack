@@ -1,6 +1,8 @@
 package com.esprit.ms.pidevbackend.Services;
 
+import com.esprit.ms.pidevbackend.Entities.FicheStatus;
 import com.esprit.ms.pidevbackend.Entities.Fiche_de_paie;
+import com.esprit.ms.pidevbackend.Entities.methodePaiement;
 import com.esprit.ms.pidevbackend.Repositories.FicheDePaieRepo;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
@@ -11,6 +13,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.io.OutputStream;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -20,6 +23,29 @@ public class FicheDePaieService implements IFicheDePaieService {
 
     @Override
     public Fiche_de_paie addFicheDePaie(Fiche_de_paie ficheDePaie) {
+        // Définir des valeurs par défaut si nécessaire
+        if (ficheDePaie.getDatePaiement() == null) {
+            ficheDePaie.setDatePaiement(new Date()); // Date actuelle
+        }
+        if (ficheDePaie.getTypePaiement() == null) {
+            ficheDePaie.setTypePaiement(methodePaiement.ESPECES); // Valeur par défaut
+        }
+        if (ficheDePaie.getNom() == null) {
+            ficheDePaie.setNom("Employé Inconnu"); // Valeur par défaut
+        }
+        if (ficheDePaie.getMontantInitial() == null) {
+            ficheDePaie.setMontantInitial(0.0f); // Valeur par défaut
+        }
+
+//        // Calculer le montant final
+//        double salaireJournalier = ficheDePaie.getMontantInitial() / 30;
+//        float montantFinal = (float) (ficheDePaie.getMontantInitial() - (ficheDePaie.getJoursNonTravailles() * salaireJournalier));
+//        ficheDePaie.setMontantFinal(montantFinal);
+
+        // Définir le statut par défaut à "unpaid"
+        ficheDePaie.setStatutPaiementL(FicheStatus.Unpaid);
+
+        // Sauvegarder la fiche de paie
         return ficheDePaieRepo.save(ficheDePaie);
     }
 
@@ -32,11 +58,6 @@ public class FicheDePaieService implements IFicheDePaieService {
     public List<Fiche_de_paie> getAllFichesDePaie() {
         return ficheDePaieRepo.findAll();
     }
-  /*
-  public List<Fiche_de_paie> getAllFichesDePaie() {
-        return ficheDePaieRepo.findAllByOrderByIdBulletinPaieDesc();
-    }
-    */
 
     @Override
     public void deleteFicheDePaie(Long idBulletinPaie) {
@@ -46,21 +67,21 @@ public class FicheDePaieService implements IFicheDePaieService {
 
     @Override
     public Fiche_de_paie updateFicheDePaie(Long idBulletinPaie, Fiche_de_paie ficheDePaie) {
-        return ficheDePaieRepo.save(ficheDePaie);
+        Fiche_de_paie existingFiche = getFicheDePaieById(idBulletinPaie);
+        if (existingFiche != null) {
+            // Mettre à jour uniquement le statut de paiement
+            existingFiche.setStatutPaiementL(ficheDePaie.getStatutPaiementL());
+            return ficheDePaieRepo.save(existingFiche);
+        }
+        return null;
     }
-
-    /**
-     * @Override public Fiche_de_paie updateFicheDePaie(Fiche_de_paie ficheDePaie) {
-     * return ficheDePaieRepo.save(ficheDePaie);
-     * }
-     **/
 
     @Override
     public Fiche_de_paie calculerSalaire(Long idBulletinPaie) {
         Fiche_de_paie fiche = getFicheDePaieById(idBulletinPaie);
         if (fiche != null) {
             double salaireJournalier = fiche.getMontantInitial() / 30;
-            float montantFinal = (float) (fiche.getMontantInitial() - (fiche.getJoursTravailles() * salaireJournalier));
+            float montantFinal = (float) (fiche.getMontantInitial() - (fiche.getJoursNonTravailles() * salaireJournalier));
             fiche.setMontantFinal(montantFinal);
             return updateFicheDePaie(idBulletinPaie, fiche);
         }
@@ -84,30 +105,40 @@ public class FicheDePaieService implements IFicheDePaieService {
                 // Open document and add content
                 document.open();
 
-                // Header: Company logo and name
+                // Header: Company contact info and name
                 PdfPTable headerTable = new PdfPTable(2);
                 headerTable.setWidthPercentage(100);
                 headerTable.setWidths(new float[]{50, 50}); // Left and Right column proportions
 
-                // Left cell: Company contact info
-                PdfPCell contactCell = new PdfPCell(new Phrase("(123) 1234-567-8901\ninfodomain.com\nMon - Sat 8:00 - 17:30, Sunday - CLOSED", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10)));
+                // Left cell: Company contact info with emojis
+                PdfPCell contactCell = new PdfPCell();
                 contactCell.setBorder(0);
                 contactCell.setVerticalAlignment(Element.ALIGN_LEFT);
                 contactCell.setHorizontalAlignment(Element.ALIGN_LEFT);
                 contactCell.setPaddingLeft(10);
+
+                // Add contact info with emojis
+                Paragraph contactInfo = new Paragraph();
+                contactInfo.add(new Chunk("📞 ", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12)));
+                contactInfo.add(new Chunk("+(123) 1234-567-8901\n", FontFactory.getFont(FontFactory.HELVETICA, 10)));
+                contactInfo.add(new Chunk("📧 ", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12)));
+                contactInfo.add(new Chunk("infodomain.com\n", FontFactory.getFont(FontFactory.HELVETICA, 10)));
+                contactInfo.add(new Chunk("🟢 ", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12)));
+                contactInfo.add(new Chunk("Mon - Sat 8:00 - 17:30, Sunday - CLOSED", FontFactory.getFont(FontFactory.HELVETICA, 10)));
+                contactCell.addElement(contactInfo);
                 headerTable.addCell(contactCell);
 
-                // Right cell: Company name and logo
+                // Right cell: Company name with logo 🏗️
                 PdfPCell logoCell = new PdfPCell();
                 logoCell.setBorder(0);
                 logoCell.setVerticalAlignment(Element.ALIGN_RIGHT);
                 logoCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 
-                // Load company logo image (ensure you have a valid image path)
-                Image logo = Image.getInstance("path_to_logo_image.jpg");  // Update with your image path
-                logo.scaleToFit(100, 50);  // Scale logo to desired size
-                logoCell.addElement(logo);
-                logoCell.addElement(new Phrase("Construction Co.", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12)));
+                // Add company name with logo 🏗️
+                Paragraph companyName = new Paragraph();
+                companyName.add(new Chunk("🏗️ ", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14)));
+                companyName.add(new Chunk("Construction", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12)));
+                logoCell.addElement(companyName);
                 headerTable.addCell(logoCell);
 
                 document.add(headerTable); // Add header to document
@@ -116,25 +147,48 @@ public class FicheDePaieService implements IFicheDePaieService {
                 document.add(new Paragraph(" "));
 
                 // Add pay slip content
-                document.add(new Paragraph("Pay Slip"));
-                document.add(new Paragraph("User Name: " + fiche.getNom()));
-                document.add(new Paragraph("Payment Status: " + fiche.getStatutPaiementL()));
-                document.add(new Paragraph("Payment Type: " + fiche.getTypePaiement()));
-                document.add(new Paragraph("Payment Date: " + fiche.getDatePaiement()));
-                document.add(new Paragraph("Initial Amount: " + fiche.getMontantInitial()));
-                document.add(new Paragraph("Days Not Worked: " + fiche.getJoursTravailles()));
-                document.add(new Paragraph("Final Amount: " + fiche.getMontantFinal()));
+                Paragraph paySlipTitle = new Paragraph("Pay Slip", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 16));
+                paySlipTitle.setAlignment(Element.ALIGN_CENTER);
+                document.add(paySlipTitle);
 
-                // Footer: Contact info (aligned left)
-                Paragraph footerLeft = new Paragraph("(123) 1234-567-8901\ninfodomain.com\nMon - Sat 8:00 - 17:30, Sunday - CLOSED",
-                        FontFactory.getFont(FontFactory.HELVETICA, 8));
-                footerLeft.setAlignment(Element.ALIGN_LEFT);
-                document.add(footerLeft);
+                // Add a space after the title
+                document.add(new Paragraph(" "));
 
-                // Footer: Company name (aligned right)
-                Paragraph footerRight = new Paragraph("Construction Co.", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10));
-                footerRight.setAlignment(Element.ALIGN_RIGHT);
-                document.add(footerRight);
+                // Add payslip details with bold labels
+                Paragraph userInfo = new Paragraph();
+                userInfo.add(new Chunk("User Name: ", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12)));
+                userInfo.add(new Chunk(fiche.getNom(), FontFactory.getFont(FontFactory.HELVETICA, 12)));
+                document.add(userInfo);
+
+                Paragraph paymentStatus = new Paragraph();
+                paymentStatus.add(new Chunk("Payment Status: ", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12)));
+                paymentStatus.add(new Chunk(fiche.getStatutPaiementL().toString(), FontFactory.getFont(FontFactory.HELVETICA, 12)));
+                document.add(paymentStatus);
+
+                Paragraph paymentType = new Paragraph();
+                paymentType.add(new Chunk("Payment Type: ", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12)));
+                paymentType.add(new Chunk(fiche.getTypePaiement().toString(), FontFactory.getFont(FontFactory.HELVETICA, 12)));
+                document.add(paymentType);
+
+                Paragraph paymentDate = new Paragraph();
+                paymentDate.add(new Chunk("Payment Date: ", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12)));
+                paymentDate.add(new Chunk(fiche.getDatePaiement().toString(), FontFactory.getFont(FontFactory.HELVETICA, 12)));
+                document.add(paymentDate);
+
+                Paragraph initialAmount = new Paragraph();
+                initialAmount.add(new Chunk("Initial Amount: ", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12)));
+                initialAmount.add(new Chunk(String.valueOf(fiche.getMontantInitial()), FontFactory.getFont(FontFactory.HELVETICA, 12)));
+                document.add(initialAmount);
+
+                Paragraph daysNotWorked = new Paragraph();
+                daysNotWorked.add(new Chunk("Days Not Worked: ", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12)));
+                daysNotWorked.add(new Chunk(String.valueOf(fiche.getJoursNonTravailles()), FontFactory.getFont(FontFactory.HELVETICA, 12)));
+                document.add(daysNotWorked);
+
+                Paragraph finalAmount = new Paragraph();
+                finalAmount.add(new Chunk("Final Amount: ", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12)));
+                finalAmount.add(new Chunk(String.valueOf(fiche.getMontantFinal()), FontFactory.getFont(FontFactory.HELVETICA, 12)));
+                document.add(finalAmount);
 
                 // Close document
                 document.close();
@@ -147,7 +201,6 @@ public class FicheDePaieService implements IFicheDePaieService {
             }
         }
     }
-
     public List<Fiche_de_paie> getFichesByNom(String nom) {
         return ficheDePaieRepo.findByNom(nom);
     }

@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Set;
 
 public interface FicheDePaieRepo  extends JpaRepository<Fiche_de_paie,Long> {
     List<Fiche_de_paie> findAllByOrderByIdBulletinPaieDesc();
@@ -14,6 +15,6 @@ public interface FicheDePaieRepo  extends JpaRepository<Fiche_de_paie,Long> {
     @Query("SELECT f FROM Fiche_de_paie f WHERE f.nom = :nom ORDER BY f.datePaiement DESC")
     List<Fiche_de_paie> findByNom(@Param("nom") String nom);
 
-
+    Set<Fiche_de_paie> findByIdUtilisateur(Long idUtilisateur);
 
 }

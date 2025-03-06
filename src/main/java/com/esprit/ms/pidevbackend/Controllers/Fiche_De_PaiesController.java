@@ -10,6 +10,7 @@ import com.esprit.ms.pidevbackend.Services.IFicheDePaieService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,8 +44,13 @@ public class Fiche_De_PaiesController {
 
     @Operation(description = "Supprimer une fiche de paie par ID")
     @DeleteMapping("/{id}")
-    public void deleteFicheDePaie(@PathVariable("id") Long idBulletinPaie) {
-        iFicheDePaieService.deleteFicheDePaie(idBulletinPaie);
+    public ResponseEntity<Void> deleteFicheDePaie(@PathVariable("id") Long idBulletinPaie) {
+        try {
+            iFicheDePaieService.deleteFicheDePaie(idBulletinPaie);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @Operation(description = "Modifier une fiche de paie")

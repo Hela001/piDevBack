@@ -18,35 +18,14 @@ import java.util.List;
 public class RapportFinController {
     @Autowired
     IRapportFinService iRapportFinService;
-
-    @Operation(description="recuperer le rapport de la base de donné")
-    @PostMapping("add")
-    public RapportFinancier AjoutRapportFinancier (@RequestBody RapportFinancier RF) {
-        return iRapportFinService.addRapport(RF);
+    @Operation(summary = "Générer un rapport financier pour un utilisateur")
+    @GetMapping("/{id}/{budget}")
+    public RapportFinancier generateRapport(
+            @PathVariable("id") Long idUtilisateur,
+            @PathVariable("budget") double budget) {
+        return iRapportFinService.generateRapport(idUtilisateur, budget);
     }
 
-    @GetMapping("getRapport/{id}")
-    public RapportFinancier GetRapportById(@PathVariable ("id") Long idRapport){
-        return iRapportFinService.getRapportById(idRapport);
-    }
-
-
-    @GetMapping("getAll")
-    public List<RapportFinancier> getAllRapport(){
-        return iRapportFinService.getAllRapport();
-    }
-
-
-    @DeleteMapping("deleteRapport/{id}")
-    public void DeleteRapport (@PathVariable("id") Long idRapport) {
-        iRapportFinService.deleteRapport(idRapport);
-    }
-
-
-    @PutMapping("/modifyRapport")
-    public RapportFinancier updateRapport(@RequestBody RapportFinancier Rp) {
-        return iRapportFinService.modifyRapport(Rp);
-    }
 }
 
 

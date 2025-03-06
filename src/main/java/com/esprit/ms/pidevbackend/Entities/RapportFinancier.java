@@ -20,6 +20,7 @@ public class RapportFinancier {
     Long  idRapport ;
     Long idUtilisateur ;
     double  dépense ;
+    double  budget ;
     float  Salaire ;
     @Enumerated(EnumType.STRING)
     RapportStatus  status ;
@@ -35,4 +36,28 @@ public class RapportFinancier {
     private Set<Facture> factures;
 
 
+
+    public void setIdUtilisateur(Long idUtilisateur) {
+        this.idUtilisateur = idUtilisateur;
+    }
+
+    public void setDépense(double dépense) {
+        this.dépense = dépense;
+    }
+
+    public void setSalaire(float salaire) {
+        Salaire = salaire;
+    }
+
+    public void setStatus(RapportStatus status) {
+        this.status = status;
+    }
+
+    public void setFicheDePaies(Set<Fiche_de_paie> ficheDePaies) {
+        this.ficheDePaies = ficheDePaies;
+    }
+
+    public void setFactures(Set<Facture> factures) {
+        this.factures = factures;
+    }
 }

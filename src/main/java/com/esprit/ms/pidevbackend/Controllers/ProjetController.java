@@ -89,5 +89,15 @@ public class ProjetController {
         String weatherData = projetService.getWeatherForecastForProject(projetId);
         return ResponseEntity.ok(weatherData); // Renvoie les données météo
     }
+    @GetMapping("/export-excel")
+    public ResponseEntity<byte[]> exportProjetToExcel() throws IOException {
+        byte[] excelContent = projetService.generateProjetExcel();
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=projets.xlsx")
+                .body(excelContent);
+    }
+
 
 }

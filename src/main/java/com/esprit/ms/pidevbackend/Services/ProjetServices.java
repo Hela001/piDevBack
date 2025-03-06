@@ -9,6 +9,8 @@ import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Paragraph;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -105,5 +107,47 @@ public class ProjetServices implements IProjetServices {
         double longitude = projet.getLongitude();
 
         return weatherService.getWeatherForecast(latitude, longitude);
+    }
+    public byte[] generateProjetExcel() throws IOException {
+        List<Projet> projets = projetRepository.findAll();
+
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Projets");
+
+        // En-têtes
+        Row headerRow = sheet.createRow(0);
+        String[] columns = {"ID", "Nom", "Description", "Manager", "Status", "Date Début", "Date Fin"};
+        for (int i = 0; i < columns.length; i++) {
+            Cell cell = headerRow.createCell(i);
+            cell.setCellValue(columns[i]);
+            cell.setCellStyle(getHeaderCellStyle(workbook));
+        }
+
+        // Remplir les lignes
+        int rowNum = 1;
+        for (Projet projet : projets) {
+            Row row = sheet.createRow(rowNum++);
+            row.createCell(0).setCellValue(projet.getIdProjet());
+            row.createCell(1).setCellValue(projet.getNom());
+            row.createCell(2).setCellValue(projet.getDescription());
+            row.createCell(3).setCellValue(projet.getChefProjetId());
+            row.createCell(4).setCellValue(projet.getStatus().name());
+            row.createCell(5).setCellValue(projet.getDateDebut().toString());
+            row.createCell(6).setCellValue(projet.getDateFinPrevue().toString());
+        }
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        workbook.write(outputStream);
+        workbook.close();
+
+        return outputStream.toByteArray();
+    }
+
+    private CellStyle getHeaderCellStyle(Workbook workbook) {
+        CellStyle headerCellStyle = workbook.createCellStyle();
+        Font font = workbook.createFont();
+        font.setBold(true);
+        headerCellStyle.setFont(font);
+        return headerCellStyle;
     }
 }

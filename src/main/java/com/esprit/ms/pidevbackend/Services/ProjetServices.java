@@ -11,6 +11,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -24,6 +25,8 @@ public class ProjetServices implements IProjetServices {
 
     private  ProjetRepository projetRepository;
     private WeatherService weatherService;
+    MailingService  mailingService;
+    private String chefProjetEmail;
 
 
     @Override
@@ -99,6 +102,8 @@ public class ProjetServices implements IProjetServices {
         document.close();
         return out.toByteArray();
     }
+
+
     public String getWeatherForecastForProject(Long projetId) {
         Projet projet = projetRepository.findById(projetId)
                 .orElseThrow(() -> new EntityNotFoundException("Projet non trouvé avec l'ID " + projetId));
@@ -106,7 +111,16 @@ public class ProjetServices implements IProjetServices {
         double latitude = projet.getLatitude();
         double longitude = projet.getLongitude();
 
-        return weatherService.getWeatherForecast(latitude, longitude);
+        String weatherJson = weatherService.getWeatherForecast(latitude, longitude);
+
+        // Vérifier si la météo est mauvaise et envoyer un mail si nécessaire
+        if (weatherService.isBadWeather(weatherJson)) {
+            String sujet = "⚠️ Alerte Météo pour le Projet : " + projet.getNom();
+            String contenu = "Bonjour,\n\nLa météo prévue pour le projet " + projet.getNom() + " est mauvaise.\nPrenez vos précautions.\n\nCordialement,\nL'équipe Projet";
+            mailingService.envoyerMail(chefProjetEmail, sujet, contenu);
+        }
+
+        return weatherJson;
     }
     public byte[] generateProjetExcel() throws IOException {
         List<Projet> projets = projetRepository.findAll();

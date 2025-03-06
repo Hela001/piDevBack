@@ -84,11 +84,12 @@ public class ProjetController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=projet_" + id + ".pdf")
                 .body(pdfContent);
     }
-    @GetMapping("/{projetId}/weather")
-    public ResponseEntity<String> getProjectWeather(@PathVariable Long projetId) {
-        String weatherData = projetService.getWeatherForecastForProject(projetId);
-        return ResponseEntity.ok(weatherData); // Renvoie les données météo
+    @GetMapping("/{id}/weather")
+    public ResponseEntity<String> getWeatherForProject(@PathVariable Long id) {
+        String weatherData = projetService.getWeatherForecastForProject(id);
+        return ResponseEntity.ok(weatherData);
     }
+
     @GetMapping("/export-excel")
     public ResponseEntity<byte[]> exportProjetToExcel() throws IOException {
         byte[] excelContent = projetService.generateProjetExcel();

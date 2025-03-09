@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @AllArgsConstructor
@@ -76,4 +77,11 @@ public class Fiche_De_PaiesController {
     public void imprimerFiche(@PathVariable("id") Long idBulletinPaie, HttpServletResponse response) {
         iFicheDePaieService.imprimerFiche(idBulletinPaie, response);
     }
+
+    @Operation(description = "Récupérer les statistiques des fiches de paie")
+    @GetMapping("/statistics")
+    public Map<String, Long> getFicheStatistics() {
+        return iFicheDePaieService.getFicheStatistics();
+    }
+
 }

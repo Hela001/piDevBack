@@ -4,6 +4,7 @@ import com.esprit.ms.pidevbackend.Entities.Fiche_de_paie;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IFicheDePaieService {
     Fiche_de_paie addFicheDePaie(Fiche_de_paie ficheDePaie);
@@ -14,5 +15,10 @@ public interface IFicheDePaieService {
     Fiche_de_paie calculerSalaire(Long idBulletinPaie);
 
     void imprimerFiche(Long idBulletinPaie, HttpServletResponse response);
+
+    Map<String, Long> getFicheStatistics();
+    long countBystatutPaiementL(String statutPaiementL);
+
+
 
 }

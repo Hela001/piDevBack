@@ -18,13 +18,6 @@ import java.util.List;
 public class RapportFinController {
     @Autowired
     IRapportFinService iRapportFinService;
-    @Operation(summary = "Générer un rapport financier pour un utilisateur")
-    @GetMapping("/{id}/{budget}")
-    public RapportFinancier generateRapport(
-            @PathVariable("id") Long idUtilisateur,
-            @PathVariable("budget") double budget) {
-        return iRapportFinService.generateRapport(idUtilisateur, budget);
-    }
 
 }
 

@@ -5,5 +5,4 @@ import com.esprit.ms.pidevbackend.Entities.RapportFinancier;
 import java.util.List;
 
 public interface IRapportFinService {
-    public RapportFinancier generateRapport(Long idUtilisateur, double budget) ;
     }

@@ -14,7 +14,9 @@ import org.springframework.stereotype.Service;
 
 import java.io.OutputStream;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @AllArgsConstructor
@@ -204,4 +206,21 @@ public class FicheDePaieService implements IFicheDePaieService {
     public List<Fiche_de_paie> getFichesByNom(String nom) {
         return ficheDePaieRepo.findByNom(nom);
     }
+
+    @Override
+    public Map<String, Long> getFicheStatistics() {
+        long paidFiches = ficheDePaieRepo.countBystatutPaiementL("Paid");
+        long unpaidFiches = ficheDePaieRepo.countBystatutPaiementL("Unpaid");
+        Map<String, Long> statistics = new HashMap<>();
+        statistics.put("paidFiches", paidFiches);
+        statistics.put("unpaidFiches", unpaidFiches);
+        return statistics;
+    }
+
+    @Override
+    public long countBystatutPaiementL(String statutPaiementL) {
+        return 0;
+    }
+
+
 }

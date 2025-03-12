@@ -1,5 +1,6 @@
 package com.esprit.ms.pidevbackend.Entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -22,6 +23,7 @@ public class LigneCommande {
     @ManyToOne
     Materiel materiel ;
     @ManyToOne
+    @JsonBackReference
     Commande commande;
     boolean affecte ;
 }

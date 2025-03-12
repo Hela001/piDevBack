@@ -20,4 +20,6 @@ public interface LigneCommandeRepo extends JpaRepository<LigneCommande, Long> {
     @Query("SELECT lc FROM LigneCommande lc WHERE lc.commande.idCommande = :idCommande")
     List<LigneCommande> findByCommandeId(@Param("idCommande") Long idCommande);
 
-}
+
+   }
+

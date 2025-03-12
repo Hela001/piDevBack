@@ -24,7 +24,7 @@ public class Materiel {
     int quantite;
     String nomMateriel ;
     float prixMateriel ;
-    @OneToMany(mappedBy = "materiel")
+    @OneToMany(mappedBy = "materiel" , cascade = CascadeType.ALL)
     @JsonIgnore
     List<LigneCommande> ligneCommandes ;
 

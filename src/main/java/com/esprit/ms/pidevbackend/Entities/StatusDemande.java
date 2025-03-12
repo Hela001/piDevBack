@@ -1,8 +1,7 @@
 package com.esprit.ms.pidevbackend.Entities;
 
-public enum Status {
+public enum StatusDemande {
     En_attente,
     Accepte,
-    Refuse,
-    envoye
+    Refuse
 }

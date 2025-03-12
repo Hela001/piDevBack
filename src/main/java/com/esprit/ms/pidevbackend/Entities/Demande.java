@@ -1,5 +1,6 @@
 package com.esprit.ms.pidevbackend.Entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -21,6 +22,8 @@ public class Demande {
     @Enumerated(EnumType.STRING)
     Status status ;
     Date dateDemande ;
-    @OneToMany(mappedBy = "demande")
+    @OneToMany(mappedBy = "demande" , cascade = CascadeType.ALL)
+    @JsonManagedReference  // Empêche la boucle infinie
     List<LigneDemande> ligneDemandes ;
+    Long idUser ;
 }

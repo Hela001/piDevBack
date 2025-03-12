@@ -1,9 +1,10 @@
 package com.esprit.ms.pidevbackend.Entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -12,16 +13,12 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @ToString
 @FieldDefaults(level=AccessLevel.PRIVATE)
-
-public class LigneDemande {
+public class Chauffeur {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    Long idLigneDemande;
-    int Quantite;
-    @ManyToOne
-    @JsonBackReference  // Empêche la boucle infinie
-
-    Demande demande ;
-    @ManyToOne
-    Materiel materiel ;
+    Long idChauffeur;
+    Long numeroTel;
+    String nomChauffeur;
+    @OneToOne(mappedBy = "chauffeur")
+    Vehicule vehicule;
 }

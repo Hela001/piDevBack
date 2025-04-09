@@ -1,6 +1,7 @@
 package com.esprit.ms.pidevbackend.Services;
 
 import com.esprit.ms.pidevbackend.Entities.Facture;
+import com.esprit.ms.pidevbackend.Entities.FactureStatus;
 import com.esprit.ms.pidevbackend.Repositories.FactureRepo;
 import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
@@ -63,11 +64,16 @@ public class FactureService implements IFactureService {
         return (List<Facture>) factureRepo.findAll();
     }
 
+//    @Override
+//    public Facture getFactureById(Long idFacture) {
+//        return factureRepo.findById(idFacture).orElse(null);
+//    }
+
     @Override
     public Facture getFactureById(Long idFacture) {
-        return factureRepo.findById(idFacture).orElse(null);
+        return factureRepo.findById(idFacture)
+                .orElseThrow(() -> new RuntimeException("Facture non trouvée"));
     }
-
     @Override
     public void deleteFacture(Long idFacture) {
         factureRepo.deleteById(idFacture);
@@ -86,6 +92,12 @@ public class FactureService implements IFactureService {
         statistics.put("paidInvoices", paidInvoices);
         statistics.put("unpaidInvoices", unpaidInvoices);
         return statistics;
+    }
+    public Facture updateFactureStatus(Long idFacture, String status) {
+        Facture facture = factureRepo.findById(idFacture)
+                .orElseThrow(() -> new RuntimeException("Facture non trouvée"));
+        facture.setStatus(FactureStatus.valueOf(status));
+        return factureRepo.save(facture);
     }
 
 }

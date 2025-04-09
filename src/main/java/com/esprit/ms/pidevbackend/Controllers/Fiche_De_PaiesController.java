@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -82,6 +83,16 @@ public class Fiche_De_PaiesController {
     @GetMapping("/statistics")
     public Map<String, Long> getFicheStatistics() {
         return iFicheDePaieService.getFicheStatistics();
+    }
+    @Operation(description = "Récupérer les informations d'un utilisateur par son nom")
+    @GetMapping("/user/{nom}")
+    public ResponseEntity<Map<String, Object>> getUserInfo(@PathVariable String nom) {
+        // Implémentez cette méthode pour récupérer les infos de l'utilisateur depuis votre base de données
+        Map<String, Object> userInfo = new HashMap<>();
+        userInfo.put("salaireBase", 3000); // Exemple
+        userInfo.put("joursAbsence", 2); // Exemple
+        userInfo.put("poste", "Développeur"); // Exemple
+        return ResponseEntity.ok(userInfo);
     }
 
 }

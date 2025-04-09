@@ -222,5 +222,12 @@ public class FicheDePaieService implements IFicheDePaieService {
         return 0;
     }
 
-
+    @Override
+    public Map<String, Object> getUserInfo(String nom) {
+        Map<String, Object> userInfo = new HashMap<>();
+        userInfo.put("salaireBase", 3000);
+        userInfo.put("joursAbsence", 2);
+        userInfo.put("poste", "Développeur");
+        return userInfo;
+    }
 }

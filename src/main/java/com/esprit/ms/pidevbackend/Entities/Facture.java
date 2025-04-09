@@ -67,10 +67,17 @@ public class Facture {
         return tva;
     }
 
+    public Long getIdFacture() {
+        return idFacture;
+    }
+
     public FactureStatus getStatus() {
         return status;
     }
 
+    public void setStatus(FactureStatus status) {
+        this.status = status;
+    }
 
     public Paiement getPaiement() {
         return paiement;

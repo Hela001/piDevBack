@@ -14,4 +14,6 @@ public interface IFactureService {
     Facture updateFacture(Long idFacture, Facture facture);
     Map<String, Long> getInvoiceStatistics();
     void sendEmail(String recipient , String body , String subject);
+
+    Facture updateFactureStatus(Long idFacture, String newStatus);
 }

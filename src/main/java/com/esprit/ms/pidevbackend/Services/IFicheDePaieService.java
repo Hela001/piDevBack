@@ -18,7 +18,7 @@ public interface IFicheDePaieService {
 
     Map<String, Long> getFicheStatistics();
     long countBystatutPaiementL(String statutPaiementL);
-
+    public Map<String, Object> getUserInfo(String nom);
 
 
 }

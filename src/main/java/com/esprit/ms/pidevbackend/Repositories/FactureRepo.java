@@ -7,6 +7,6 @@ import java.util.Set;
 
 public interface FactureRepo extends JpaRepository<Facture,Long> {
     long countByStatus(String status);
-    Set<Facture> findByIdUtilisateur(Long idUtilisateur);
+        Set<Facture> findByIdUtilisateur(Long idUtilisateur);
 
 }

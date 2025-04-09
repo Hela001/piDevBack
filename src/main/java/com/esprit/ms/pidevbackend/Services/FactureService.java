@@ -10,7 +10,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -98,6 +103,50 @@ public class FactureService implements IFactureService {
                 .orElseThrow(() -> new RuntimeException("Facture non trouvée"));
         facture.setStatus(FactureStatus.valueOf(status));
         return factureRepo.save(facture);
+    }
+
+    @Override
+    public byte[] exportFacturesToExcel() throws IOException {
+        List<Facture> factures = getAllFactures();
+
+        try (Workbook workbook = new XSSFWorkbook()) {
+            Sheet sheet = workbook.createSheet("Factures");
+
+            // Create header row
+            Row headerRow = sheet.createRow(0);
+            String[] headers = {
+                    "ID", "Total Amount", "Invoice Date", "Due Date",
+                    "Amount Excl. Tax", "Tax", "Status"
+            };
+
+            for (int i = 0; i < headers.length; i++) {
+                Cell cell = headerRow.createCell(i);
+                cell.setCellValue(headers[i]);
+            }
+
+            // Fill data rows
+            int rowNum = 1;
+            for (Facture facture : factures) {
+                Row row = sheet.createRow(rowNum++);
+
+                row.createCell(0).setCellValue(facture.getIdFacture());
+                row.createCell(1).setCellValue(facture.getMontantTotal());
+                row.createCell(2).setCellValue(facture.getDateFacture().toString());
+                row.createCell(3).setCellValue(facture.getDateEcheance().toString());
+                row.createCell(4).setCellValue(facture.getMontantTotalHorsTaxe());
+                row.createCell(5).setCellValue(facture.getTva());
+                row.createCell(6).setCellValue(facture.getStatus().toString());
+            }
+
+            // Auto-size columns
+            for (int i = 0; i < headers.length; i++) {
+                sheet.autoSizeColumn(i);
+            }
+
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            workbook.write(outputStream);
+            return outputStream.toByteArray();
+        }
     }
 
 }

@@ -114,4 +114,20 @@ public class FactureController {
             return ResponseEntity.internalServerError().build();
         }
     }
+    @Operation(description = "Exporter les factures en Excel")
+    @GetMapping(value = "/excel", produces = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    public ResponseEntity<byte[]> exportToExcel() {
+        try {
+            byte[] excelContent = iFactureService.exportFacturesToExcel();
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
+            headers.setContentDisposition(ContentDisposition.attachment()
+                    .filename("factures.xlsx").build());
+
+            return new ResponseEntity<>(excelContent, headers, HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
 }

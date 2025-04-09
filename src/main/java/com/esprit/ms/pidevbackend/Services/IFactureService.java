@@ -3,6 +3,7 @@ package com.esprit.ms.pidevbackend.Services;
 import com.esprit.ms.pidevbackend.Entities.Facture;
 import com.esprit.ms.pidevbackend.Entities.Fiche_de_paie;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -16,4 +17,6 @@ public interface IFactureService {
     void sendEmail(String recipient , String body , String subject);
 
     Facture updateFactureStatus(Long idFacture, String newStatus);
+
+    byte[] exportFacturesToExcel() throws IOException;
 }

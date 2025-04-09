@@ -1,6 +1,5 @@
 package com.esprit.ms.pidevbackend.Controllers;
 
-import com.esprit.ms.pidevbackend.Services.PdfService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import com.esprit.ms.pidevbackend.Entities.Facture;
@@ -19,8 +18,6 @@ import java.util.Map;
 @Tag(name = "Gestion Facturation")
 public class FactureController {
     @Autowired
-    private PdfService pdfService;
-    @Autowired
     private IFactureService iFactureService;
 
     @Operation(description = "Ajouter une facture")
@@ -28,12 +25,6 @@ public class FactureController {
     public Facture AjoutFacture(@RequestBody Facture facture) {
         return iFactureService.addFacture(facture);
     }
-
-//    @Operation(description = "Récupérer une facture par son ID")
-//    @GetMapping("/{id}")
-//    public Facture GetFactureById(@PathVariable("id") Long idFacture) {
-//        return iFactureService.getFactureById(idFacture);
-//    }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getFactureById(@PathVariable("id") Long idFacture) {
@@ -87,33 +78,7 @@ public class FactureController {
         return iFactureService.updateFactureStatus(idFacture, newStatus);
     }
 
-    @GetMapping(value = "/{id}/pdf", produces = MediaType.APPLICATION_PDF_VALUE)
-    public ResponseEntity<byte[]> generatePdf(@PathVariable Long idFacture) {
-        try {
-            System.out.println("Tentative de génération PDF pour facture ID: " + idFacture);
-            Facture facture = iFactureService.getFactureById(idFacture);
 
-            if (facture == null) {
-                System.out.println("Facture non trouvée pour ID: " + idFacture);
-                return ResponseEntity.notFound().build();
-            }
-
-            byte[] pdf = pdfService.generateInvoicePdf(facture);
-            System.out.println("PDF généré avec succès, taille: " + pdf.length + " bytes");
-
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_PDF);
-            headers.setContentDisposition(ContentDisposition.attachment()
-                    .filename("facture_" + idFacture + ".pdf").build());
-            headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
-
-            return new ResponseEntity<>(pdf, headers, HttpStatus.OK);
-        } catch (Exception e) {
-            System.err.println("Erreur génération PDF: " + e.getMessage());
-            e.printStackTrace();
-            return ResponseEntity.internalServerError().build();
-        }
-    }
     @Operation(description = "Exporter les factures en Excel")
     @GetMapping(value = "/excel", produces = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
     public ResponseEntity<byte[]> exportToExcel() {

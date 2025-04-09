@@ -69,10 +69,7 @@ public class FactureService implements IFactureService {
         return (List<Facture>) factureRepo.findAll();
     }
 
-//    @Override
-//    public Facture getFactureById(Long idFacture) {
-//        return factureRepo.findById(idFacture).orElse(null);
-//    }
+
 
     @Override
     public Facture getFactureById(Long idFacture) {
@@ -148,5 +145,6 @@ public class FactureService implements IFactureService {
             return outputStream.toByteArray();
         }
     }
+
 
 }

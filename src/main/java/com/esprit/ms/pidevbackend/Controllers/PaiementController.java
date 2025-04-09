@@ -20,61 +20,42 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("Api/paiement")
-
 public class PaiementController {
-
-    @Value("${stripe.secret.key}")
-    private String stripeSecretKey;
-
-    @Value("${frontend.url}")
-    private String frontendUrl;
 
     @PostMapping("/create-checkout-session")
     public Map<String, String> createCheckoutSession(@RequestBody Map<String, Object> request) throws StripeException {
-        Stripe.apiKey = stripeSecretKey;
+        // Configurez votre clé secrète Stripe
+        Stripe.apiKey = "sk_test_51Qy2JjKpCQHkABgKoV8ZvThcDiiD6s0baLb0lpiF8pOLMqnKK9GfNYdZa3VnecfP0dfPU8gsVOmhTTzUT8Rwv2zU00BJvOpEW1";
 
         Long factureId = Long.parseLong(request.get("factureId").toString());
-        // Convertir explicitement en Long
         Long amount = Long.parseLong(request.get("amount").toString());
         String currency = (String) request.get("currency");
+        String successUrl = (String) request.get("successUrl");
+        String cancelUrl = (String) request.get("cancelUrl");
 
-        SessionCreateParams.Builder paramsBuilder = SessionCreateParams.builder()
+        SessionCreateParams params = SessionCreateParams.builder()
                 .setMode(SessionCreateParams.Mode.PAYMENT)
-                .setSuccessUrl(request.get("successUrl").toString())
-                .setCancelUrl(request.get("cancelUrl").toString())
+                .setSuccessUrl(successUrl)
+                .setCancelUrl(cancelUrl)
                 .addLineItem(
                         SessionCreateParams.LineItem.builder()
                                 .setQuantity(1L)
                                 .setPriceData(
                                         SessionCreateParams.LineItem.PriceData.builder()
                                                 .setCurrency(currency)
-                                                .setUnitAmount(amount) // Maintenant c'est un Long
+                                                .setUnitAmount(amount)
                                                 .setProductData(
                                                         SessionCreateParams.LineItem.PriceData.ProductData.builder()
                                                                 .setName("Facture #" + factureId)
                                                                 .build())
                                                 .build())
-                                .build());
+                                .build())
+                .build();
 
-        Session session = Session.create(paramsBuilder.build());
+        Session session = Session.create(params);
 
         Map<String, String> response = new HashMap<>();
         response.put("id", session.getId());
-        return response;
-    }
-
-    @PostMapping("/create-payment-intent")
-    public Map<String, String> createPaymentIntent(@RequestBody Map<String, Object> request) throws StripeException {
-        Stripe.apiKey = stripeSecretKey;
-
-        com.stripe.model.PaymentIntent intent = com.stripe.model.PaymentIntent.create(
-                new com.stripe.param.PaymentIntentCreateParams.Builder()
-                        .setAmount(Long.parseLong(request.get("amount").toString()))
-                        .setCurrency(request.get("currency").toString())
-                        .build());
-
-        Map<String, String> response = new HashMap<>();
-        response.put("clientSecret", intent.getClientSecret());
         return response;
     }
 }

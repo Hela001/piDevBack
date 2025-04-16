@@ -15,4 +15,5 @@ public interface ITacheServices {
     public List<Tache> getTasksByMission(long missionId);
     public List<Tache> searchTaches(String nom, Status etat, Priorite priorite);
     public Tache changerStatutTache(Long id, Status nouveauStatut);
+    public void notifyTaskUpdate(Long tacheId);
 }

@@ -16,7 +16,8 @@ import java.util.Optional;
 
 @Service
 public class TacheServices implements ITacheServices {
-
+    @Autowired
+    private NotificationService notificationService;
     private final TacheRepository tacheRepository;
     private final MissionRepository missionRepository;
 
@@ -83,8 +84,33 @@ public class TacheServices implements ITacheServices {
     @Transactional
     public Tache changerStatutTache(Long id, Status nouveauStatut) {
         tacheRepository.updateStatus(id, nouveauStatut);
+        notifyTaskUpdate(id); // <-- Ajout nécessaire
         return tacheRepository.findById(id).orElseThrow(() -> new RuntimeException("Tâche non trouvée"));
     }
+
+
+
+    public void notifyTaskUpdate(Long tacheId) {
+        Tache tache = tacheRepository.findById(tacheId)
+                .orElseThrow(() -> new EntityNotFoundException("Tâche non trouvée avec l'ID : " + tacheId));
+
+        String destinataire = "neflahela@gmail.com"; // destinataire fixe
+        String nomProjet = tache.getMission().getProjet().getNom(); // tu dois avoir une relation Mission → Projet
+        String nomMission = tache.getMission().getNom();
+        String nomTache = tache.getNom();
+        String nouvelEtat = tache.getEtatTache().toString();
+        String employeNom = "Hela Nefla"; // à récupérer dynamiquement plus tard si possible
+
+        notificationService.envoyerNotification(
+                destinataire,
+                nomProjet,
+                nomMission,
+                nomTache,
+                nouvelEtat,
+                employeNom
+        );
+    }
+
 
 
 

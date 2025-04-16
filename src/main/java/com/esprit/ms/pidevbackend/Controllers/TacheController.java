@@ -87,6 +87,15 @@ public class TacheController {
         Tache updatedTache = tacheService.changerStatutTache(id, status);
         return ResponseEntity.ok(updatedTache); // Renvoie l'objet de la tâche mise à jour
     }
+    // TacheController.java
+
+    @PostMapping("/taches/{id}/notify-update")
+    public ResponseEntity<String> notifyTacheUpdate(@PathVariable Long id) {
+        tacheService.notifyTaskUpdate(id);
+        return ResponseEntity.ok("Notification envoyée avec succès");
+    }
+
+
 
 
 

@@ -3,12 +3,16 @@ package com.esprit.ms.pidevbackend.Controllers;
 import com.esprit.ms.pidevbackend.Entities.Projet;
 import com.esprit.ms.pidevbackend.Entities.Status;
 import com.esprit.ms.pidevbackend.Services.ProjetServices;
+import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -18,6 +22,9 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/projets")
 public class ProjetController {
+
+    @Autowired
+    private org.springframework.mail.javamail.JavaMailSender mailSender;
 
     @Autowired
     private ProjetServices projetService;
@@ -99,6 +106,25 @@ public class ProjetController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=projets.xlsx")
                 .body(excelContent);
     }
+    @GetMapping("/{id}/rapport")
+    public ResponseEntity<Map<String, Object>> getRapportComplet(@PathVariable Long id) {
+        return ResponseEntity.ok(projetService.genererRapportProjetComplet(id));
+    }
+    @PostMapping("/api/email/send-report")
+    public ResponseEntity<?> sendReportByEmail(@RequestParam("file") MultipartFile file,
+                                               @RequestParam("email") String email) throws Exception {
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+        helper.setTo(email);
+        helper.setSubject("Rapport Projet");
+        helper.setText("Voici votre rapport projet.");
+        helper.addAttachment(file.getOriginalFilename(), new ByteArrayResource(file.getBytes()));
+        mailSender.send(message);
+        return ResponseEntity.ok("Email envoyé");
+    }
+
+
+
 
 
 }

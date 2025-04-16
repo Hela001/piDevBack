@@ -83,11 +83,15 @@ public class TacheController {
         return taches.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(taches);
     }
     @PutMapping("/{id}/status")
-    public ResponseEntity<Tache> updateTaskStatus(@PathVariable Long id, @RequestBody Status status) {
-        System.out.println("Reçu status: " + status); // Ajoutez cette ligne pour afficher le status
-        Tache updatedTask = tacheService.updateTaskStatus(id, status);
-        return ResponseEntity.ok(updatedTask);
+    public ResponseEntity<Tache> updateStatus(@PathVariable Long id, @RequestParam Status status) {
+        Tache updatedTache = tacheService.changerStatutTache(id, status);
+        return ResponseEntity.ok(updatedTache); // Renvoie l'objet de la tâche mise à jour
     }
+
+
+
+
+
 
 
 

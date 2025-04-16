@@ -5,10 +5,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.DynamicUpdate;
+
 import java.util.Date;
 import java.util.List;
 
 @Entity
+@DynamicUpdate
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter

@@ -14,5 +14,5 @@ public interface ITacheServices {
     public boolean deleteTache(Long id);
     public List<Tache> getTasksByMission(long missionId);
     public List<Tache> searchTaches(String nom, Status etat, Priorite priorite);
-    public Tache updateTaskStatus(Long taskId, Status status);
+    public Tache changerStatutTache(Long id, Status nouveauStatut);
 }

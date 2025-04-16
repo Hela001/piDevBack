@@ -28,12 +28,11 @@ public class WeatherService {
                 .getJSONObject(0)
                 .getString("main");
 
-
-        return true  ;
-       // weatherCondition.equalsIgnoreCase("Rain") ||
-        // weatherCondition.equalsIgnoreCase("Storm") ||
-        // weatherCondition.equalsIgnoreCase("Snow") ||
-        // weatherCondition.equalsIgnoreCase("Thunderstorm") ||
-        // weatherCondition.equalsIgnoreCase("Extreme");
+        return true;
+        /* weatherCondition.equalsIgnoreCase("Rain") ||
+                weatherCondition.equalsIgnoreCase("Storm") ||
+                weatherCondition.equalsIgnoreCase("Snow") ||
+                weatherCondition.equalsIgnoreCase("Thunderstorm") ||
+                weatherCondition.equalsIgnoreCase("Extreme"); */
     }
 }

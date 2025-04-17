@@ -4,8 +4,10 @@ import com.esprit.ms.pidevbackend.Entities.Notification;
 import com.esprit.ms.pidevbackend.Repositories.NotificationRepository;
 import jakarta.mail.internet.MimeMessage;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -69,7 +71,10 @@ public class NotificationService {
 
             javaMailSender.send(message);
             System.out.println("Mail envoyé au chef de projet avec succès.");
-
+            // Envoi de la notification WebSocket
+            String notificationMessage = String.format("🟢 %s a mis à jour la tâche '%s' (%s) dans la mission '%s' du projet '%s'.",
+                    employeNom, nomTache, nouvelEtat, nomMission, nomProjet);
+            notifyAdminOfTaskUpdate(nomTache, nouvelEtat, employeNom);
         } catch (Exception e) {
             System.err.println("Erreur envoi email : " + e.getMessage());
             e.printStackTrace();
@@ -87,5 +92,12 @@ public class NotificationService {
                 .orElseThrow(() -> new RuntimeException("Notification introuvable"));
         notif.setLue(true);
         notificationRepository.save(notif);
+    }
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
+
+    public void notifyAdminOfTaskUpdate(String taskName, String newStatus, String updatedBy) {
+        String message = String.format("🔔 Tâche '%s' mise à jour en '%s' par %s.", taskName, newStatus, updatedBy);
+        messagingTemplate.convertAndSend("/topic/tasks", message);
     }
 }

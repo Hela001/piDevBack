@@ -9,6 +9,7 @@ import com.esprit.ms.pidevbackend.Repositories.TacheRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -83,10 +84,16 @@ public class TacheServices implements ITacheServices {
     }
     @Transactional
     public Tache changerStatutTache(Long id, Status nouveauStatut) {
+        Optional<Tache> tacheOptional = tacheRepository.findById(id);
+        if (!tacheOptional.isPresent()) {
+            throw new EntityNotFoundException("Tâche non trouvée avec l'ID : " + id);
+        }
+        Tache tache = tacheOptional.get();
         tacheRepository.updateStatus(id, nouveauStatut);
-        notifyTaskUpdate(id); // <-- Ajout nécessaire
-        return tacheRepository.findById(id).orElseThrow(() -> new RuntimeException("Tâche non trouvée"));
+        notifyTaskUpdate(id);
+        return tache;
     }
+
 
 
 
@@ -110,6 +117,9 @@ public class TacheServices implements ITacheServices {
                 employeNom
         );
     }
+
+
+
 
 
 

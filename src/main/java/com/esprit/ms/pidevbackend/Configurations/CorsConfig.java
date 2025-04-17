@@ -13,11 +13,12 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOriginPatterns("*") // Utiliser allowedOriginPatterns au lieu de allowedOrigins
+                        .allowedOrigins("http://localhost:4200") // Frontend Angular
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
-                        .allowCredentials(true); // Autoriser les credentials (cookies, headers, etc.)
+                        .allowCredentials(true); // Autorise les credentials
             }
         };
     }
 }
+

@@ -8,6 +8,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +17,9 @@ import java.util.List;
 @RequestMapping("/api/taches")
 @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 public class TacheController {
+    @Autowired
+    private SimpMessagingTemplate simpMessagingTemplate;  // Ajoute cette ligne pour l'injection
+
 
     private final TacheServices tacheService;
 
@@ -24,7 +28,7 @@ public class TacheController {
         this.tacheService = tacheService;
     }
 
-    // Permet de gérer les requêtes OPTIONS pour CORS
+    // Gère les requêtes OPTIONS pour CORS
     @RequestMapping(method = RequestMethod.OPTIONS)
     public ResponseEntity<Void> handleOptions() {
         return ResponseEntity.ok().build();
@@ -44,20 +48,21 @@ public class TacheController {
         return tache != null ? ResponseEntity.ok(tache) : ResponseEntity.notFound().build();
     }
 
-    // Ajouter une tâche à une mission spécifique
+    // Ajouter une tâche à une mission
     @PostMapping("/mission/{missionId}")
     public ResponseEntity<Tache> addTache(@PathVariable long missionId, @RequestBody Tache tache) {
         Tache createdTache = tacheService.addTache(missionId, tache);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdTache);
     }
 
+    // Mettre à jour une tâche existante
     @PutMapping("/{id}")
     public ResponseEntity<Tache> updateTache(@PathVariable Long id, @RequestBody Tache tache) {
         Tache updatedTache = tacheService.updateTache(id, tache);
         return updatedTache != null ? ResponseEntity.ok(updatedTache) : ResponseEntity.notFound().build();
     }
 
-
+    // Supprimer une tâche
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTache(@PathVariable Long id) {
         try {
@@ -67,41 +72,40 @@ public class TacheController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    // Rechercher des tâches par nom, statut ou priorité
     @GetMapping("/search")
-    public List<Tache> searchTaches(
+    public ResponseEntity<List<Tache>> searchTaches(
             @RequestParam(required = false) String nom,
             @RequestParam(required = false) Status etat,
             @RequestParam(required = false) Priorite priorite) {
-        return tacheService.searchTaches(nom, etat, priorite);
+        List<Tache> result = tacheService.searchTaches(nom, etat, priorite);
+        return result.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(result);
     }
 
-
-    // Récupérer toutes les tâches d'une mission spécifique
+    // Récupérer toutes les tâches d'une mission
     @GetMapping("/mission/{missionId}")
     public ResponseEntity<List<Tache>> getTasksByMission(@PathVariable long missionId) {
         List<Tache> taches = tacheService.getTasksByMission(missionId);
         return taches.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(taches);
     }
+
+    // Modifier le statut d'une tâche
     @PutMapping("/{id}/status")
     public ResponseEntity<Tache> updateStatus(@PathVariable Long id, @RequestParam Status status) {
         Tache updatedTache = tacheService.changerStatutTache(id, status);
-        return ResponseEntity.ok(updatedTache); // Renvoie l'objet de la tâche mise à jour
+        return updatedTache != null ? ResponseEntity.ok(updatedTache) : ResponseEntity.notFound().build();
     }
-    // TacheController.java
-
-    @PostMapping("/taches/{id}/notify-update")
+    @CrossOrigin(origins = "http://localhost:4200")
+    @PostMapping("/{id}/notify-update")
     public ResponseEntity<String> notifyTacheUpdate(@PathVariable Long id) {
-        tacheService.notifyTaskUpdate(id);
+        // Appeler la logique métier pour mettre à jour la tâche
+        tacheService.notifyTaskUpdate(id);  // Appel à la logique métier (probablement une mise à jour de tâche)
+
+        // Envoyer une notification via WebSocket
+        simpMessagingTemplate.convertAndSend("/topic/taches", "Tâche mise à jour: " + id);
+
         return ResponseEntity.ok("Notification envoyée avec succès");
     }
-
-
-
-
-
-
-
-
-
 
 }

@@ -12,5 +12,8 @@ public class StripeConfig {
     @PostConstruct
     public void init(){
         Stripe.apiKey = stripeSecretKey;
+        System.out.println("Stripe API key initialized.");
+
     }
+
 }

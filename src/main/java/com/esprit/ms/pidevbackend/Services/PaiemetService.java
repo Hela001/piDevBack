@@ -46,4 +46,3 @@ public class PaiemetService implements  IPaiemetService{
         return paiementRepo.save(p);
     }
 }
-

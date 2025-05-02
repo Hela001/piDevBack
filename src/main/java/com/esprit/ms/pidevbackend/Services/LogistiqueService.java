@@ -418,24 +418,18 @@ public class LogistiqueService implements ILogistiqueService {
         Vehicule vehicule = vehiculeRepo.findById(idVehicule)
                 .orElseThrow(() -> new EntityNotFoundException("Véhicule non trouvé"));
 
-        Chauffeur chauffeur = chauffeurRepository.findById(idChauffeur)
+        // Vérifier si le chauffeur existe
+        chauffeurRepository.findById(idChauffeur)
                 .orElseThrow(() -> new EntityNotFoundException("Chauffeur non trouvé"));
 
-        // Vérifier si le véhicule est déjà affecté à un autre chauffeur
-        if (vehicule.getChauffeur() != null) {
-            throw new IllegalStateException("Le véhicule est déjà affecté à un chauffeur.");
+        if (vehicule.getIdChauffeur() != null) {
+            throw new IllegalStateException("Le véhicule est déjà affecté.");
         }
 
-        // Affecter le chauffeur au véhicule
-        vehicule.setChauffeur(chauffeur);
-        chauffeur.setVehicule(vehicule);
-        vehicule.setDisponible(false); // Le véhicule n'est plus disponible
-        vehiculeRepo.save(vehicule);
-        chauffeurRepository.save(chauffeur);
-
-        return vehicule;
+        vehicule.setIdChauffeur(idChauffeur);
+        vehicule.setDisponible(false);
+        return vehiculeRepo.save(vehicule);
     }
-
 
 
     @Override
@@ -443,19 +437,13 @@ public class LogistiqueService implements ILogistiqueService {
         Vehicule vehicule = vehiculeRepo.findById(idVehicule)
                 .orElseThrow(() -> new EntityNotFoundException("Véhicule non trouvé"));
 
-        Chauffeur chauffeur = vehicule.getChauffeur();
-        if (chauffeur == null) {
+        if (vehicule.getIdChauffeur() == null) {
             throw new IllegalStateException("Le véhicule n'a pas de chauffeur affecté.");
         }
 
-        // Désaffecter le chauffeur du véhicule
-        vehicule.setChauffeur(null);
-        chauffeur.setVehicule(null);
-        vehicule.setDisponible(true); // Le véhicule devient disponible
-        vehiculeRepo.save(vehicule);
-        chauffeurRepository.save(chauffeur);
-
-        return vehicule;
+        vehicule.setIdChauffeur(null);
+        vehicule.setDisponible(true);
+        return vehiculeRepo.save(vehicule);
     }
 
     @Override
@@ -471,7 +459,7 @@ public class LogistiqueService implements ILogistiqueService {
 
     @Override
     public List<Vehicule> getVehiculesDisponibles() {
-        return vehiculeRepo.findByDisponibleTrue();
+        return vehiculeRepo.findByDisponibleFalse();
     }
 
 }

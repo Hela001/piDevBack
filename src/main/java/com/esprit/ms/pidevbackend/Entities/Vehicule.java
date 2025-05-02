@@ -28,6 +28,5 @@ public class Vehicule {
     Double latitude;
     Double longitude;
     LocalDate dateAffectation;
-    @OneToOne
-    Chauffeur chauffeur;
+
 }

@@ -79,7 +79,7 @@ public interface ILogistiqueService {
 
     List<Object[]> getStatistiquesParAnnee();
 
-    Vehicule affecterChauffeurAVehicule(Long idChauffeur, Long idVehicule);
+    Vehicule affecterChauffeurAVehicule(Long idVehicule, Long idChauffeur);
 
     Vehicule desaffecterChauffeurDuVehicule(Long idVehicule);
 

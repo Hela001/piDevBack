@@ -2,7 +2,6 @@ package com.esprit.ms.pidevbackend.Controller;
 
 import com.esprit.ms.pidevbackend.Entities.*;
 import com.esprit.ms.pidevbackend.Repo.*;
-import com.esprit.ms.pidevbackend.Services.IEntretienService;
 import com.esprit.ms.pidevbackend.Services.ILogistiqueService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
@@ -15,7 +14,7 @@ import java.util.*;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/Api/logistique") // Consistent lowercase naming
+@RequestMapping("/Api/logistique")
 @CrossOrigin(origins = "http://localhost:4200")
 public class LogistiqueController {
     ChauffeurRepository chauffeurRepository;
@@ -335,7 +334,7 @@ public class LogistiqueController {
         return new ResponseEntity<>(vehicule, HttpStatus.OK);
     }
 
-    @PostMapping("/{idVehicule}/desaffecter")
+    @PostMapping("/{idVehicule}")
     public ResponseEntity<Vehicule> desaffecterChauffeurDuVehicule(@PathVariable Long idVehicule) {
         Vehicule vehicule = logistiqueService.desaffecterChauffeurDuVehicule(idVehicule);
         return new ResponseEntity<>(vehicule, HttpStatus.OK);

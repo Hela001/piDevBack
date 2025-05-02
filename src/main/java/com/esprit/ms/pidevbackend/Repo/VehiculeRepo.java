@@ -13,5 +13,5 @@ public interface VehiculeRepo extends JpaRepository<Vehicule, Long> {
 
     Vehicule findByIdChauffeur(Long idChauffeur);
 
-    List<Vehicule> findByDisponibleTrue();
+    List<Vehicule> findByDisponibleFalse();
 }

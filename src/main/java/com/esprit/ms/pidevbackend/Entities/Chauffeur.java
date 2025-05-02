@@ -19,6 +19,5 @@ public class Chauffeur {
     Long idChauffeur;
     Long numeroTel;
     String nomChauffeur;
-    @OneToOne(mappedBy = "chauffeur")
-    Vehicule vehicule;
+    boolean disponible= true;
 }

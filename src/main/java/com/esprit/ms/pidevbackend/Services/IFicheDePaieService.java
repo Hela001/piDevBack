@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public interface IFicheDePaieService {
     Fiche_de_paie addFicheDePaie(Fiche_de_paie ficheDePaie);
@@ -21,4 +22,5 @@ public interface IFicheDePaieService {
     public Map<String, Object> getUserInfo(String nom);
 
 
+    Set<Fiche_de_paie> getFichesPaieByUtilisateur(Long idUtilisateur);
 }

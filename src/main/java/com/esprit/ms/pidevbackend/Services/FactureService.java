@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -144,6 +145,19 @@ public class FactureService implements IFactureService {
             workbook.write(outputStream);
             return outputStream.toByteArray();
         }
+    }
+
+    @Override
+    public void updateFactureStatus(Long factureId, FactureStatus status) {
+        Facture facture = factureRepo.findById(factureId)
+                .orElseThrow(() -> new RuntimeException("Facture non trouvée"));
+        facture.setStatus(status);
+        factureRepo.save(facture);
+    }
+
+    @Override
+    public Set<Facture> getFacturesByUtilisateur(Long idUtilisateur) {
+        return null;
     }
 
 

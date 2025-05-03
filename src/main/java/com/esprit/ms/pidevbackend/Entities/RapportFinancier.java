@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -15,49 +16,89 @@ import java.util.Set;
 @ToString
 @FieldDefaults(level=AccessLevel.PRIVATE)
 public class RapportFinancier {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     @Id
-    Long  idRapport ;
-    Long idUtilisateur ;
-    double  dépense ;
-    double  budget ;
-    float  Salaire ;
-    @Enumerated(EnumType.STRING)
-    RapportStatus  status ;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long idRapport;
 
-    /** Les relations **/
-//(cascade = CascadeType.ALL)
-    @OneToMany
-    @JsonIgnore
-    private Set<Fiche_de_paie> ficheDePaies;
+    Long idUtilisateur;
+    double depense;
+    double budget;
+    float salaire;
 
-    @OneToMany
-    @JsonIgnore
-    private Set<Facture> factures;
+    public Long getIdRapport() {
+        return idRapport;
+    }
 
+    public void setIdRapport(Long idRapport) {
+        this.idRapport = idRapport;
+    }
 
+    public Long getIdUtilisateur() {
+        return idUtilisateur;
+    }
 
     public void setIdUtilisateur(Long idUtilisateur) {
         this.idUtilisateur = idUtilisateur;
     }
 
-    public void setDépense(double dépense) {
-        this.dépense = dépense;
+    public double getDepense() {
+        return depense;
+    }
+
+    public void setDepense(double depense) {
+        this.depense = depense;
+    }
+
+    public double getBudget() {
+        return budget;
+    }
+
+    public void setBudget(double budget) {
+        this.budget = budget;
+    }
+
+    public float getSalaire() {
+        return salaire;
     }
 
     public void setSalaire(float salaire) {
-        Salaire = salaire;
+        this.salaire = salaire;
+    }
+
+    public RapportStatus getStatus() {
+        return status;
     }
 
     public void setStatus(RapportStatus status) {
         this.status = status;
     }
 
+    public Set<Fiche_de_paie> getFicheDePaies() {
+        return ficheDePaies;
+    }
+
     public void setFicheDePaies(Set<Fiche_de_paie> ficheDePaies) {
         this.ficheDePaies = ficheDePaies;
+    }
+
+    public Set<Facture> getFactures() {
+        return factures;
     }
 
     public void setFactures(Set<Facture> factures) {
         this.factures = factures;
     }
+
+    @Enumerated(EnumType.STRING)
+    RapportStatus status;
+
+    /** Les relations **/
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private Set<Fiche_de_paie> ficheDePaies = new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private Set<Facture> factures = new HashSet<>();
 }
